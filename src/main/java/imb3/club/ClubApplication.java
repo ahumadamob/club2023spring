@@ -11,3 +11,4 @@ public class ClubApplication {
 	}
 
 }
+// Revisado por el profesor Ahumada para el funcionamiento de Git
