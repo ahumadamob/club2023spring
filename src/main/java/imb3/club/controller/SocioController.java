@@ -15,6 +15,7 @@ public class SocioController {
 	@Autowired
 	private ISocioService service;
 	
+	@GetMapping("/socios")
 	public List<Socio> getSocios() {
 		return service.mostrarSocios();
 	}
