@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,6 +78,22 @@ public class SocioController {
 		}
 	}
 	
+	@DeleteMapping("/{id}")	
+	public ResponseEntity<APIResponse<Socio>> eliminarSocio(@PathVariable("id") Integer id) {
+		if(this.existe(id)) {
+			service.eliminarSocio(id);
+			List<String> messages = new ArrayList<>();
+			messages.add("La Categoria que figura en el cuerpo ha sido eliminada") ;			
+			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), messages, null);
+			return ResponseEntity.status(HttpStatus.OK).body(response);	
+		}else {
+			List<String> messages = new ArrayList<>();
+			messages.add("No existe una categoria con el ID = " + id.toString());
+			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.BAD_REQUEST.value(), messages, null);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);			
+		}
+		
+	}
 	
 	
 	
