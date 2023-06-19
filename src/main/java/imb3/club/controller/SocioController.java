@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import imb.progra.arq.controllers.APIResponse;
 import imb3.club.entity.Socio;
 import imb3.club.service.ISocioService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 
 @RestController
@@ -95,10 +98,15 @@ public class SocioController {
 		
 	}
 	
-	
-	
-
-	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<APIResponse<?>> handleConstraintViolationException(ConstraintViolationException ex){
+		List<String> errors = new ArrayList<>();
+		for(ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+			errors.add(violation.getMessage());
+		}
+		APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.BAD_REQUEST.value(), errors, null);
+		return ResponseEntity.badRequest().body(response);
+	}
 	
 	
 	//--------------Control de existencia de ID-----------------

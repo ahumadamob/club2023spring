@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Socio {
@@ -11,10 +13,22 @@ public class Socio {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	
+	@NotBlank(message = "El nombre no puede estar vacio")
+	@Size(max = 40, message = "El nombre no debe superar los 40 caracteres")
 	private String nombre;
+	
+	@NotBlank(message = "El apellido no puede estar vacio")
+	@Size(max = 40, message = "El apellido no debe superar los 40 caracteres")
 	private String apellido;
+	
+	@NotBlank(message = "La edad no puede estar vacio")
 	private int edad;
+	
+	@NotBlank(message = "El dni no puede estar vacio")
 	private int dni;
+	
+	@NotBlank(message = "El estado de cuenta no puede estar vacio")
 	private boolean estadoDeCuenta;
 	
 	
