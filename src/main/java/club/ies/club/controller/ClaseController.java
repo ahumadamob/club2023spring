@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import club.ies.club.entity.Clase;
 import club.ies.club.service.IClaseService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @RestController
 @RequestMapping("/api/v1/clase")
@@ -26,10 +28,7 @@ public class ClaseController {
 	@Autowired
 	IClaseService claseService;
 
-	// public ResponseEntity<APIResponse<List<Project>>>
-	// APIResponse<List<Project>> response = new APIResponse<List<Project>>(200,
-	// addSingleMessage("No hay elementos"), projects);
-	/// return ResponseEntity.status(HttpStatus.OK).body(response);
+	
 	@GetMapping
 	public ResponseEntity<APIResponse<List<Clase>>> buscarCategorias() {
 
@@ -105,6 +104,16 @@ public class ClaseController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
 
+	}
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<APIResponse<?>> handleConstraintViolationException(ConstraintViolationException ex){
+		List<String> errors = new ArrayList<>();
+		for(ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+			errors.add(violation.getMessage());
+		}
+		APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.BAD_REQUEST.value(), errors, null);
+		return ResponseEntity.badRequest().body(response);
 	}
 
 	private boolean existe(Integer id) {
