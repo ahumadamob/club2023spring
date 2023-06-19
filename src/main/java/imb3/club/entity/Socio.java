@@ -18,17 +18,13 @@ public class Socio {
 	@Size(max = 40, message = "El nombre no debe superar los 40 caracteres")
 	private String nombre;
 	
-	@NotBlank(message = "El apellido no puede estar vacio")
-	@Size(max = 40, message = "El apellido no debe superar los 40 caracteres")
 	private String apellido;
 	
-	@NotBlank(message = "La edad no puede estar vacio")
 	private int edad;
 	
-	@NotBlank(message = "El dni no puede estar vacio")
 	private int dni;
 	
-	@NotBlank(message = "El estado de cuenta no puede estar vacio")
+
 	private boolean estadoDeCuenta;
 	
 	

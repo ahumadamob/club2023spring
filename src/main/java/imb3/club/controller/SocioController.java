@@ -30,8 +30,10 @@ public class SocioController {
 	
 	
 	@GetMapping
-	public ResponseEntity<APIResponse<List<Socio>>> getSocios() {		
-		APIResponse<List<Socio>> response = new APIResponse<List<Socio>>(200, null, service.mostrarSocios());
+	public ResponseEntity<APIResponse<List<Socio>>> getSocios() {
+		List<String> messages = new ArrayList<>();
+		messages.add("Socios registrados");
+		APIResponse<List<Socio>> response = new APIResponse<List<Socio>>(200, messages, service.mostrarSocios());
 		return ResponseEntity.status(HttpStatus.OK).body(response);	
 	}
 	
@@ -60,7 +62,9 @@ public class SocioController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}else {
 			service.guardarSocio(socio);
-			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.CREATED.value(), null, socio);
+			List<String> messages = new ArrayList<>();
+			messages.add("Socio registrado con exito");
+			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.CREATED.value(), messages, socio);
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);			
 		}			
 	}
@@ -70,6 +74,8 @@ public class SocioController {
 	public ResponseEntity<APIResponse<Socio>> editarSocio(@RequestBody Socio socio) {
 		if(this.existe(socio.getId())) {
 			service.guardarSocio(socio);
+			List<String> messages = new ArrayList<>();
+			messages.add("Datos de Socio modificados con exito");
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), null, socio);
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}else {
@@ -86,12 +92,12 @@ public class SocioController {
 		if(this.existe(id)) {
 			service.eliminarSocio(id);
 			List<String> messages = new ArrayList<>();
-			messages.add("La Categoria que figura en el cuerpo ha sido eliminada") ;			
+			messages.add("El Socio fue eliminado de la Base de Datos") ;			
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), messages, null);
 			return ResponseEntity.status(HttpStatus.OK).body(response);	
 		}else {
 			List<String> messages = new ArrayList<>();
-			messages.add("No existe una categoria con el ID = " + id.toString());
+			messages.add("No existe un Socio con el ID = " + id.toString());
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.BAD_REQUEST.value(), messages, null);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);			
 		}
