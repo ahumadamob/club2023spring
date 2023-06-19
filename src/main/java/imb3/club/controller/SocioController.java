@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import imb3.club.entity.Socio;
@@ -21,4 +23,9 @@ public class SocioController {
 		return service.mostrarSocios();
 	}
 	
+	@PostMapping("/socios")
+	public Socio postSocio(@RequestBody Socio socio) {
+		service.guardarSocio(socio);
+		return socio;
+	}
 }

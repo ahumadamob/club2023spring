@@ -20,4 +20,14 @@ public class SocioService implements ISocioService {
 		return repo.findAll();
 	}
 
+	@Override
+	public void guardarSocio(Socio socio) {
+		repo.save(socio);
+	}
+
+	@Override
+	public void eliminarSocio(Integer id) {
+		repo.deleteById(id);
+	}
+
 }
