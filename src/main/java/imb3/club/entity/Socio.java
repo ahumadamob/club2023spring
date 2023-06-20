@@ -25,11 +25,15 @@ public class Socio {
 	@Size(max = 50, message = "El nombre no debe superar los 40 caracteres")
 	private String apellido;
 	
+	@NotNull
 	@Min(16)
 	@Max(80)
 	private int edad;
 	
+	@NotNull
 	private int dni;
+	
+	@NotNull
 	private boolean estadoDeCuenta;
 	
 	
