@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import imb3.club.entity.Profesor;
 import imb3.club.service.IProfesorService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @RestController
 @RequestMapping("/api/v1/profesor")
@@ -32,6 +35,7 @@ public class profesorController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse<Profesor>> mostrarProfesorPorId(@PathVariable("id") Integer id) {
+		//mejora de controladores para el get
 		if(this.existe(id)) {
 			Profesor profesor = profesorService.buscarProfesorPorId(id);
 			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.OK.value(), null, profesor);
@@ -48,6 +52,7 @@ public class profesorController {
 	
 	@PostMapping
 	public ResponseEntity<APIResponse<Profesor>> crearProfesor(@RequestBody Profesor profesor) {
+		//mejora de controladores para el post
 		if(this.existe(profesor.getId())) {
 			List<String> messages = new ArrayList<>();
 			messages.add("Ya existe un profesor con el ID = " + profesor.getId().toString());
@@ -63,6 +68,7 @@ public class profesorController {
 	
 	@PutMapping	
 	public ResponseEntity<APIResponse<Profesor>> modificarProfesor(@RequestBody Profesor profesor) {
+		//mejora de controlladores para el put
 		if(this.existe(profesor.getId())) {
 			profesorService.guardarProfesor(profesor);
 			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.OK.value(), null, profesor);
@@ -70,7 +76,7 @@ public class profesorController {
 		}else {
 			List<String> messages = new ArrayList<>();
 			messages.add("No existe un profesor con ese ID ");
-			messages.add("Para crear uno nuevo debe utilizar el verbo POST");
+			messages.add("Para crear un nuevo profesor debe utilizar el verbo POST");
 			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(), messages, null);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
@@ -79,6 +85,7 @@ public class profesorController {
 	
 	@DeleteMapping("/{id}")	
 	public ResponseEntity<APIResponse<Profesor>> eliminarProfesor(@PathVariable("id") Integer id) {
+		//mejora de controladores para el delete
 		if(this.existe(id)) {
 			profesorService.eliminarProfesor(id);
 			List<String> messages = new ArrayList<>();
@@ -95,6 +102,7 @@ public class profesorController {
 	}
 	
 	
+	//mejora de controladores
 	private boolean existe(Integer id) {
 		if(id == null) {
 			return false;
@@ -107,5 +115,17 @@ public class profesorController {
 			}
 		}
 	}
+	
+	//manejador de excepciones
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<APIResponse<?>> handleConstraintViolationExeption(ConstraintViolationException ex){
+		List<String> errors= new ArrayList<>();
+		for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+				errors.add(violation.getMessage());
+			}
+			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(),errors, null);
+			return ResponseEntity.badRequest().body(response);
+		}
+		
 	
 }
