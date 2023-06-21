@@ -10,8 +10,10 @@ import jakarta.validation.constraints.Size;
 @Entity
 public class Profesor {
 	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;//
 	
 	@NotBlank(message = "El nombre del profesor no puede estar vacío")
 	@Size(max = 50, message = "El nombre no puede superar los 50 caracteres") 
@@ -25,7 +27,7 @@ public class Profesor {
 	@NotBlank(message = "La actividad no puede estar vacía")
 	@Size(max = 50, message = "La actividad no puede superar los 50 caracteres") 
 	private String actividad;
-	private Integer id;
+	
 	public Integer getId() {
 		return id;
 	}
