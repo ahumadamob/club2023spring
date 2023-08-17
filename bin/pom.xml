@@ -8,11 +8,19 @@
 		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+<<<<<<< HEAD
 	<groupId>imb.2023</groupId>
 	<artifactId>club</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>club</name>
 	<description>Programación 2 - Trabajo final Club Deportivo</description>
+=======
+	<groupId>club.ies</groupId>
+	<artifactId>club</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>club</name>
+	<description>Club deportivo rama Cardozo y Gonzalez</description>
+>>>>>>> cardozo_gonzalez
 	<properties>
 		<java.version>17</java.version>
 	</properties>
