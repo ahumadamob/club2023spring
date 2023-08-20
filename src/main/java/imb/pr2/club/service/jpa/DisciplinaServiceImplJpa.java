@@ -1,4 +1,4 @@
-package imb3.club.service.mysql;
+package imb.pr2.club.service.jpa;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ import imb.pr2.club.service.IDisciplinaService;
 
 @Service
 @Primary
-public class DisciplinaServiceImplMysql implements IDisciplinaService{
+public class DisciplinaServiceImplJpa implements IDisciplinaService{
 	
 	@Autowired
 	DisciplinaRepository repo;

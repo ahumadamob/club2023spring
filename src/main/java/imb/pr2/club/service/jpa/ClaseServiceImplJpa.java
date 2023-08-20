@@ -1,4 +1,4 @@
-package club.ies.club.service.jpa;
+package imb.pr2.club.service.jpa;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +14,7 @@ import imb.pr2.club.service.IClaseService;
 
 @Service
 @Primary
-public class ClaseService implements IClaseService{
+public class ClaseServiceImplJpa implements IClaseService{
 
 	@Autowired
 	ClaseRepository repo;

@@ -1,4 +1,4 @@
-package imb3.club.service.jpa;
+package imb.pr2.club.service.jpa;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import imb.pr2.club.repository.SocioRepository;
 import imb.pr2.club.service.ISocioService;
 
 @Service
-public class SocioService implements ISocioService {
+public class SocioServiceImplJpa implements ISocioService {
 	
 	@Autowired
 	private SocioRepository repo;
