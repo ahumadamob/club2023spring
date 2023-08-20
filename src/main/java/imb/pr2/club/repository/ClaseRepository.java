@@ -1,4 +1,4 @@
-package club.ies.club.repository;
+package imb.pr2.club.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

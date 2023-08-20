@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import imb.pr2.club.entity.Disciplina;
+import imb.pr2.club.repository.DisciplinaRepository;
 import imb.pr2.club.service.IDisciplinaService;
-import imb3.club.repository.DisciplinaRepository;
 
 @Service
 @Primary
