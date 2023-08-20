@@ -1,4 +1,4 @@
-package imb3.club.controller;
+package imb.pr2.club.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import imb.pr2.club.entity.Socio;
 import imb.pr2.club.service.ISocioService;
-import imb.progra.arq.controllers.APIResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 

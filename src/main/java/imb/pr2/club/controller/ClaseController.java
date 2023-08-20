@@ -1,4 +1,4 @@
-package club.ies.club.controller;
+package imb.pr2.club.controller;
 
 import java.util.ArrayList;
 import java.util.List;

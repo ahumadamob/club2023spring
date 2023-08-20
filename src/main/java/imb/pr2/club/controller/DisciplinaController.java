@@ -1,4 +1,4 @@
-package imb3.club.controller;
+package imb.pr2.club.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import imb.pr2.club.entity.Disciplina;
 import imb.pr2.club.service.IDisciplinaService;
-import imb.progra.arq.controllers.APIResponse;
 
 @RestController
 @RequestMapping("/api/v1/disciplinas")

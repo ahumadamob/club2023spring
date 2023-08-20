@@ -1,4 +1,4 @@
-package imb3.club.controllers;
+package imb.pr2.club.controller;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import jakarta.validation.ConstraintViolationException;
 
 @RestController
 @RequestMapping("/api/v1/profesor")
-public class profesorController {
+public class ProfesorController {
 	
 	@Autowired
 	IProfesorService profesorService;
