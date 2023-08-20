@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import club.ies.club.entity.Clase;
 import club.ies.club.repository.ClaseRepository;
-import club.ies.club.service.IClaseService;
+import imb.pr2.club.entity.Clase;
+import imb.pr2.club.service.IClaseService;
 
 
 @Service

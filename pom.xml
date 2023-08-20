@@ -8,11 +8,11 @@
 		<version>3.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>imb.progra</groupId>
-	<artifactId>arq</artifactId>
+	<groupId>imb.pr2</groupId>
+	<artifactId>club</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>arq</name>
-	<description>Demostración de construcción de Arquitectura</description>
+	<name>club</name>
+	<description>Programación II - 2023 - Club Social</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

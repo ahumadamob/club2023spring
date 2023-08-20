@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import club.ies.club.entity.Clase;
-import club.ies.club.service.IClaseService;
+import imb.pr2.club.entity.Clase;
+import imb.pr2.club.service.IClaseService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 

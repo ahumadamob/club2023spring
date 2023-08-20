@@ -1,8 +1,8 @@
-package imb3.club.service;
+package imb.pr2.club.service;
 
 import java.util.List;
 
-import imb3.club.entity.Socio;
+import imb.pr2.club.entity.Socio;
 
 public interface ISocioService {
 	

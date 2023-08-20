@@ -1,8 +1,8 @@
-package imb3.club.service;
+package imb.pr2.club.service;
 
 import java.util.List;
 
-import imb3.club.entity.Profesor;
+import imb.pr2.club.entity.Profesor;
 
 public interface IProfesorService {
 	

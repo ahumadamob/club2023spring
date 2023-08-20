@@ -5,9 +5,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import imb3.club.entity.Socio;
+
+import imb.pr2.club.entity.Socio;
+import imb.pr2.club.service.ISocioService;
 import imb3.club.repository.SocioRepository;
-import imb3.club.service.ISocioService;
 
 @Service
 public class SocioService implements ISocioService {

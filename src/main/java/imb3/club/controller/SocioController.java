@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import imb.pr2.club.entity.Socio;
+import imb.pr2.club.service.ISocioService;
 import imb.progra.arq.controllers.APIResponse;
-import imb3.club.entity.Socio;
-import imb3.club.service.ISocioService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 

@@ -1,4 +1,4 @@
-package imb3.club.entity;
+package imb.pr2.club.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

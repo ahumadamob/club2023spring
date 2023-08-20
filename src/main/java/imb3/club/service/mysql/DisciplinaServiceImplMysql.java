@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import imb3.club.entity.Disciplina;
+import imb.pr2.club.entity.Disciplina;
+import imb.pr2.club.service.IDisciplinaService;
 import imb3.club.repository.DisciplinaRepository;
-import imb3.club.service.IDisciplinaService;
 
 @Service
 @Primary

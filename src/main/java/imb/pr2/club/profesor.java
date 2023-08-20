@@ -1,4 +1,4 @@
-package imb3.club;
+package imb.pr2.club;
 
 public class profesor {
 	

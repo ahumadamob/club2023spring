@@ -1,8 +1,8 @@
-package club.ies.club.service;
+package imb.pr2.club.service;
 
 import java.util.List;
 
-import club.ies.club.entity.Clase;
+import imb.pr2.club.entity.Clase;
 
 public interface IClaseService {
 
