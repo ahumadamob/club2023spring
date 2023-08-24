@@ -26,18 +26,14 @@ public class DisciplinaServiceImplJpa implements IDisciplinaService{
 	}
 
 	@Override
-	public Disciplina buscarDisciplinaPorId(Integer id) {
-		
-		Optional<Disciplina> optionalDisciplina;
-		optionalDisciplina =repo.findById(id);
-		 if(optionalDisciplina.isPresent()) {
-			 return optionalDisciplina.get();
-		 }
-		 else {
-			 return null;
-		 }
+	public Disciplina buscarDisciplinaPorId(Integer id){
+		// Buscar una disciplina por su ID en la base de datos
+		 Optional<Disciplina> optionalDisciplina = repo.findById(id);
+		 // Utilizar orElse(null) para manejar el valor opcional de manera segura
+		// Si el Optional contiene una disciplina, se devuelve esa instancia; si no, se devuelve null
+		    return optionalDisciplina.orElse(null);
 	}
-
+	
 	@Override
 	public void guardarDisciplina(Disciplina disciplina) {
 		
