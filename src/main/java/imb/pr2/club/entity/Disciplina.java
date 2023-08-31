@@ -10,10 +10,10 @@ public class Disciplina {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Integer id;
-	String nombre;
-	String horario;
-	int numCancha;
+	private Integer id; // Identificador único de la disciplina
+	private String nombre; // Nombre de la disciplina
+	private String horario; // Horario en el que se lleva a cabo la disciplina
+	private int numCancha;  // Número de la cancha asignada para la disciplina
 	public Integer getId() {
 		return id;
 	}
