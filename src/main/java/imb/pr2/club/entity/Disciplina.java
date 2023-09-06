@@ -13,7 +13,7 @@ public class Disciplina {
 	private Integer id; // Identificador único de la disciplina
 	private String nombre; // Nombre de la disciplina
 	private String horario; // Horario en el que se lleva a cabo la disciplina
-	private int numCancha;  // Número de la cancha asignada para la disciplina
+	
 	public Integer getId() {
 		return id;
 	}
@@ -32,12 +32,7 @@ public class Disciplina {
 	public void setHorario(String horario) {
 		this.horario = horario;
 	}
-	public int getNumCancha() {
-		return numCancha;
-	}
-	public void setNumCancha(int numCancha) {
-		this.numCancha = numCancha;
-	}
+	
 	
 	
 	
