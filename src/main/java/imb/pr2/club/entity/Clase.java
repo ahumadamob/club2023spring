@@ -5,7 +5,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 public class Clase {
@@ -27,7 +26,6 @@ public class Clase {
 	private Integer cupo;
 	
 	@NotBlank(message = "El día no puede estar vacío")
-	@Size(max = 40, message = "El nombre no debe superar los 40 caracteres") 
 	private String dia;
 	
 	@NotNull(message = "El horario no puede estar vacío")
