@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
 @RestController
-@RequestMapping("/api/v1/clase")
+@RequestMapping("/api/v1/clases")
 public class ClaseController {
 
 	@Autowired

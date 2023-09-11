@@ -1,11 +1,19 @@
 package imb.pr2.club.entity;
+
+import java.sql.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 
 @Entity
 public class Clase {
@@ -14,66 +22,96 @@ public class Clase {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@NotNull(message = "El id del socio no puede estar vacío") 
-	private Integer id_Socio;
+	@ManyToOne
+	@JoinColumn(name="socioId")
+	private Socio socioId;
 	
-	@NotNull(message = "El id del profesor no puede estar vacío")
-	private Integer id_Profesor;
+	@ManyToOne
+	@JoinColumn(name="profeId")
+	private Profesor profeId;
 	
-	@NotNull(message = "El id de disciplina no puede estar vacío")
-	private Integer Id_Disciplina;
+	@ManyToOne
+	@JoinColumn(name="disciplinaId")
+	private Disciplina discId;
 	
-	@NotNull(message = "El cupo no puede estar vacío")
+	@NotNull
+	@Max(value = 10, message = "El valor maximo del cupo es de 10")
+	@Min(value= 1, message = "El valor minimo del cupo es 1")
 	private Integer cupo;
 	
-	@NotBlank(message = "El día no puede estar vacío")
-	@Size(max = 40, message = "El nombre no debe superar los 40 caracteres") 
-	private String dia;
 	
-	@NotNull(message = "El horario no puede estar vacío")
-	private Integer horario;
+	@NotNull
+	@Min(1)
+	@Max(6)
+	private Integer dia;
 	
+	@NotNull
+	@Min(9)
+	@Max(22)
+	private Integer hora;
+	
+	
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getId_Socio() {
-		return id_Socio;
+
+	public Socio getSocioId() {
+		return socioId;
 	}
-	public void setId_Socio(Integer id_Socio) {
-		this.id_Socio = id_Socio;
+
+	public void setSocioId(Socio socioId) {
+		this.socioId = socioId;
 	}
-	public Integer getId_Profesor() {
-		return id_Profesor;
+
+	public Profesor getProfeId() {
+		return profeId;
 	}
-	public void setId_Profesor(Integer id_Profesor) {
-		this.id_Profesor = id_Profesor;
+
+	public void setProfeId(Profesor profeId) {
+		this.profeId = profeId;
 	}
-	public Integer getId_Disciplina() {
-		return Id_Disciplina;
+
+	public Disciplina getDiscId() {
+		return discId;
 	}
-	public void setId_Disciplina(Integer id_Disciplina) {
-		Id_Disciplina = id_Disciplina;
+
+	public void setDiscId(Disciplina discId) {
+		this.discId = discId;
 	}
+
 	public Integer getCupo() {
 		return cupo;
 	}
+
 	public void setCupo(Integer cupo) {
 		this.cupo = cupo;
 	}
-	public String getDia() {
+
+	public Integer getDia() {
 		return dia;
 	}
-	public void setDia(String dia) {
+
+	public void setDia(Integer dia) {
 		this.dia = dia;
 	}
-	public Integer getHorario() {
-		return horario;
+
+	public Integer getHora() {
+		return hora;
 	}
-	public void setHorario(Integer horario) {
-		this.horario = horario;
+
+	public void setHora(Integer hora) {
+		this.hora = hora;
 	}
+
+	
+	
+	
+
+		
 
 }
