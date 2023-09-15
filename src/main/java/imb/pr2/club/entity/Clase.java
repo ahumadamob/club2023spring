@@ -22,9 +22,11 @@ public class Clase {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
+	/*
 	@ManyToOne
 	@JoinColumn(name="socioId")
 	private Socio socioId;
+	*/
 	
 	@ManyToOne
 	@JoinColumn(name="profeId")
@@ -60,6 +62,7 @@ public class Clase {
 		this.id = id;
 	}
 
+	/*
 	public Socio getSocioId() {
 		return socioId;
 	}
@@ -67,6 +70,7 @@ public class Clase {
 	public void setSocioId(Socio socioId) {
 		this.socioId = socioId;
 	}
+	*/
 
 	public Profesor getProfeId() {
 		return profeId;
