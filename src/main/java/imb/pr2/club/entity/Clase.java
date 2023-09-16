@@ -1,0 +1,117 @@
+package imb.pr2.club.entity;
+
+import java.sql.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+
+@Entity
+public class Clase {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
+	
+	@ManyToOne
+	@JoinColumn(name="socioId")
+	private Socio socioId;
+	
+	@ManyToOne
+	@JoinColumn(name="profeId")
+	private Profesor profeId;
+	
+	@ManyToOne
+	@JoinColumn(name="disciplinaId")
+	private Disciplina discId;
+	
+	@NotNull
+	@Max(value = 10, message = "El valor maximo del cupo es de 10")
+	@Min(value= 1, message = "El valor minimo del cupo es 1")
+	private Integer cupo;
+	
+	
+	@NotNull
+	@Min(1)
+	@Max(6)
+	private Integer dia;
+	
+	@NotNull
+	@Min(9)
+	@Max(22)
+	private Integer hora;
+	
+	
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Socio getSocioId() {
+		return socioId;
+	}
+
+	public void setSocioId(Socio socioId) {
+		this.socioId = socioId;
+	}
+
+	public Profesor getProfeId() {
+		return profeId;
+	}
+
+	public void setProfeId(Profesor profeId) {
+		this.profeId = profeId;
+	}
+
+	public Disciplina getDiscId() {
+		return discId;
+	}
+
+	public void setDiscId(Disciplina discId) {
+		this.discId = discId;
+	}
+
+	public Integer getCupo() {
+		return cupo;
+	}
+
+	public void setCupo(Integer cupo) {
+		this.cupo = cupo;
+	}
+
+	public Integer getDia() {
+		return dia;
+	}
+
+	public void setDia(Integer dia) {
+		this.dia = dia;
+	}
+
+	public Integer getHora() {
+		return hora;
+	}
+
+	public void setHora(Integer hora) {
+		this.hora = hora;
+	}
+
+	
+	
+	
+
+		
+
+}
