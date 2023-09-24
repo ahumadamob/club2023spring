@@ -10,5 +10,6 @@ public interface ISocioService {
 	public Socio buscarSocioById(Integer id);
 	public void guardarSocio(Socio socio);
 	public void eliminarSocio(Integer id);
+	boolean exists(Integer id);
 	
 }
