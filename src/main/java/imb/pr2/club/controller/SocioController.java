@@ -22,14 +22,14 @@ import jakarta.validation.ConstraintViolationException;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/")
 public class SocioController {
 	
 	@Autowired
 	private ISocioService service;
 	
 	
-	@GetMapping
+	@GetMapping("socios")
 	public ResponseEntity<APIResponse<List<Socio>>> getSocios() {
 		List<String> messages = new ArrayList<>();
 		messages.add("Socios registrados");
@@ -37,7 +37,7 @@ public class SocioController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);	
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("socio/{id}")
 	public ResponseEntity<APIResponse<Socio>> mostrarSocioPorId(@PathVariable("id") Integer id) {
 		if(this.existe(id)) {
 			Socio socio = service.buscarSocioById(id);

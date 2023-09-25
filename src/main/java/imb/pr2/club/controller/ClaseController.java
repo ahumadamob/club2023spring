@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
 @RestController
-@RequestMapping("/api/v1/clase")
+@RequestMapping("/api/v1/clases")
 public class ClaseController {
 
 	@Autowired
@@ -30,7 +30,7 @@ public class ClaseController {
 
 	
 	@GetMapping
-	public ResponseEntity<APIResponse<List<Clase>>> buscarCategorias() {
+	public ResponseEntity<APIResponse<List<Clase>>> buscarClase() {
 
 		APIResponse<List<Clase>> response = new APIResponse<List<Clase>>(200, null, claseService.buscarClase());
 
