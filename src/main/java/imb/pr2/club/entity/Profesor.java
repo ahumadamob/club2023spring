@@ -18,12 +18,15 @@ public class Profesor {
 	@NotBlank(message = "El nombre del profesor no puede estar vacío")
 	@Size(max = 50, message = "El nombre no puede superar los 50 caracteres") 
 	private String nombre;
+	
 	@NotBlank(message = "El apellido del profesor no puede estar vacío")
 	@Size(max = 50, message = "El apellido no puede superar los 50 caracteres") 
 	private String apellido;
+	
 	@NotBlank(message = "El DNI del profesor no puede estar vacío")
 	@Size(max = 10, message = "El DNI no puede superar los 10 caracteres") 
 	private String dni;
+	
 	@NotBlank(message = "La actividad no puede estar vacía")
 	@Size(max = 50, message = "La actividad no puede superar los 50 caracteres") 
 	private String actividad;

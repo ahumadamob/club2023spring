@@ -45,4 +45,9 @@ public class ProfesorServiceImplJpa  implements IProfesorService{
 		}		
 	}
 	
+	@Override
+	public boolean exists(Integer id) {
+		return repo.existsById(id);
+	};
+	
 }
