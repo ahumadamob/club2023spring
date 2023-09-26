@@ -40,5 +40,11 @@ public class SocioServiceImplJpa implements ISocioService {
 	public void eliminarSocio(Integer id) {
 		repo.deleteById(id);
 	}
+	
+	@Override
+	public boolean exists(Integer id) {
+		return repo.existsById(id);
+	}
+	
 
 }
