@@ -38,8 +38,8 @@ public class ProfesorController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse<Profesor>> mostrarProfesorPorId(@PathVariable("id") Integer id) {
-		//mejora de controladores para el get
-		if(this.existe(id)) {
+		
+		if(profesorService.exists(id)) {
 			Profesor profesor = profesorService.buscarProfesorPorId(id);
 			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.OK.value(), null, profesor);
 			return ResponseEntity.status(HttpStatus.OK).body(response);	
@@ -50,13 +50,12 @@ public class ProfesorController {
 			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(), messages, null);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);			
 		}
-	
 	}
 	
-	@PostMapping
+	@PostMapping("/postProfe")
 	public ResponseEntity<APIResponse<Profesor>> crearProfesor(@RequestBody Profesor profesor) {
-		//mejora de controladores para el post
-		if(this.existe(profesor.getId())) {
+				
+		if(profesorService.exists(profesor.getId())) {
 			List<String> messages = new ArrayList<>();
 			messages.add("Ya existe un profesor con el ID = " + profesor.getId().toString());
 			messages.add("Para actualizar se debe utilizar el verbo PUT");
@@ -69,10 +68,10 @@ public class ProfesorController {
 		}			
 	}
 	
-	@PutMapping	
+	@PutMapping
 	public ResponseEntity<APIResponse<Profesor>> modificarProfesor(@RequestBody Profesor profesor) {
-		//mejora de controlladores para el put
-		if(this.existe(profesor.getId())) {
+				
+		if(profesorService.exists(profesor.getId())) {
 			profesorService.guardarProfesor(profesor);
 			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.OK.value(), null, profesor);
 			return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -86,10 +85,10 @@ public class ProfesorController {
 
 	}
 	
-	@DeleteMapping("/{id}")	
+	@DeleteMapping("/deleteProf/{id}")	
 	public ResponseEntity<APIResponse<Profesor>> eliminarProfesor(@PathVariable("id") Integer id) {
-		//mejora de controladores para el delete
-		if(this.existe(id)) {
+		
+		if(profesorService.exists(id)) {
 			profesorService.eliminarProfesor(id);
 			List<String> messages = new ArrayList<>();
 			messages.add("El profesor que figura en el body ha sido eliminado correctamente") ;			
@@ -105,7 +104,7 @@ public class ProfesorController {
 	}
 	
 	
-	//mejora de controladores
+	/*mejora de controladores BORRAR!!!
 	private boolean existe(Integer id) {
 		if(id == null) {
 			return false;
@@ -118,7 +117,8 @@ public class ProfesorController {
 			}
 		}
 	}
-	//
+	*/
+	
 	//manejador de excepciones
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<APIResponse<?>> handleConstraintViolationExeption(ConstraintViolationException ex){

@@ -22,14 +22,14 @@ import jakarta.validation.ConstraintViolationException;
 
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/socio")
 public class SocioController {
 	
 	@Autowired
 	private ISocioService service;
 	
 	
-	@GetMapping("socios")
+	@GetMapping
 	public ResponseEntity<APIResponse<List<Socio>>> getSocios() {
 		List<String> messages = new ArrayList<>();
 		messages.add("Socios registrados");
@@ -37,9 +37,9 @@ public class SocioController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);	
 	}
 	
-	@GetMapping("socio/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse<Socio>> mostrarSocioPorId(@PathVariable("id") Integer id) {
-		if(this.existe(id)) {
+		if(service.exists(id)) {
 			Socio socio = service.buscarSocioById(id);
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), null, socio);
 			return ResponseEntity.status(HttpStatus.OK).body(response);	
@@ -54,7 +54,7 @@ public class SocioController {
 	
 	@PostMapping
 	public ResponseEntity<APIResponse<Socio>> crearSocio(@RequestBody Socio socio) {
-		if(this.existe(socio.getId())) {
+		if(service.exists(socio.getId())) {
 			List<String> messages = new ArrayList<>();
 			messages.add("Ya existe una categoria con el ID = " + socio.getId().toString());
 			messages.add("Para actualizar utilice el verbo PUT");
@@ -72,7 +72,7 @@ public class SocioController {
 	
 	@PutMapping
 	public ResponseEntity<APIResponse<Socio>> editarSocio(@RequestBody Socio socio) {
-		if(this.existe(socio.getId())) {
+		if(service.exists(socio.getId())) {
 			service.guardarSocio(socio);
 			List<String> messages = new ArrayList<>();
 			messages.add("Datos de Socio modificados con exito");
@@ -89,7 +89,7 @@ public class SocioController {
 	
 	@DeleteMapping("/{id}")	
 	public ResponseEntity<APIResponse<Socio>> eliminarSocio(@PathVariable("id") Integer id) {
-		if(this.existe(id)) {
+		if(service.exists(id)) {
 			service.eliminarSocio(id);
 			List<String> messages = new ArrayList<>();
 			messages.add("El Socio fue eliminado de la Base de Datos") ;			
@@ -115,7 +115,7 @@ public class SocioController {
 	}
 	
 	
-	//--------------Control de existencia de ID-----------------
+	/*//--------------Control de existencia de ID-----------------
 	private boolean existe(Integer id) {
 		if(id == null) {
 			return false;
@@ -128,4 +128,6 @@ public class SocioController {
 			}
 		}
 	}
+	*/
+	
 }

@@ -11,5 +11,6 @@ public interface IProfesorService {
 	public void guardarProfesor(Profesor profesor);
 	public void eliminarProfesor(Integer id);
 	
-
+	public boolean exists(Integer id);
+	
 }
