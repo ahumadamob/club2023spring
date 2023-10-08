@@ -36,7 +36,7 @@ public class AsistenciaController {
 	  // Agregar el método para eliminar una asistencia por ID
     @DeleteMapping("/{id}")
     public String eliminarAsistencia(@PathVariable Integer id) {
-        Asistencia asistencia = asistenciaService.obtenerPorID(id);
+        //Asistencia asistencia = asistenciaService.obtenerPorID(id);
 
         if (this.existeId(id) == null) {
             return "Asistencia no encontrada.";
@@ -51,17 +51,17 @@ public class AsistenciaController {
     // Agregar el método para actualizar una asistencia
     @PutMapping("/{id}")
     public ResponseEntity<String> actualizarAsistencia(@PathVariable Integer id, @RequestBody Asistencia asistenciaActualizada) {
-        Asistencia asistenciaExistente = asistenciaService.obtenerPorID(id);
+        //Asistencia asistenciaExistente = asistenciaService.obtenerPorID(id);
 
         if (this.existeId(id) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Asistencia no encontrada.");
         } else {
             // Actualizar los datos de la asistencia existente con los datos de la asistencia actualizada
-            asistenciaExistente.setFechaInscripcion(asistenciaActualizada.getFechaInscripcion());
-            asistenciaExistente.setPresente(asistenciaActualizada.isPresente());
+            //asistenciaExistente.setFechaInscripcion(asistenciaActualizada.getFechaInscripcion());
+            //asistenciaExistente.setPresente(asistenciaActualizada.isPresente());
             // Actualiza otros campos si es necesario
 
-            asistenciaService.guardar(asistenciaExistente);
+            //asistenciaService.guardar(asistenciaExistente);
             return ResponseEntity.status(HttpStatus.OK).body("Asistencia actualizada correctamente.");
         }
     }
