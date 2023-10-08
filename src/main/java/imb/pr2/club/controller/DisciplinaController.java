@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import imb.pr2.club.entity.Disciplina;
 import imb.pr2.club.service.IDisciplinaService;
+
 
 @RestController
 @RequestMapping("/api/v1/disciplinas")
