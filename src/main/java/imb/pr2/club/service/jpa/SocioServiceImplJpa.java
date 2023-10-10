@@ -17,12 +17,12 @@ public class SocioServiceImplJpa implements ISocioService {
 	private SocioRepository repo;
 
 	@Override
-	public List<Socio> mostrarSocios() {
+	public List<Socio> buscarTodos() {
 		return repo.findAll();
 	}
 	
 	@Override
-	public Socio buscarSocioById(Integer id) {
+	public Socio buscarPorId(Integer id) {
 		Optional<Socio> optional = repo.findById(id);
 		if(optional.isPresent()) {
 			return optional.get();
@@ -32,17 +32,17 @@ public class SocioServiceImplJpa implements ISocioService {
 	}
 
 	@Override
-	public void guardarSocio(Socio socio) {
+	public void guardar(Socio socio) {
 		repo.save(socio);
 	}
 
 	@Override
-	public void eliminarSocio(Integer id) {
+	public void eliminar(Integer id) {
 		repo.deleteById(id);
 	}
 	
 	@Override
-	public boolean exists(Integer id) {
+	public boolean existe(Integer id) {
 		return repo.existsById(id);
 	}
 	

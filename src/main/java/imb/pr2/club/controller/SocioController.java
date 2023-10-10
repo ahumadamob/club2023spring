@@ -30,17 +30,17 @@ public class SocioController {
 	
 	
 	@GetMapping
-	public ResponseEntity<APIResponse<List<Socio>>> getSocios() {
+	public ResponseEntity<APIResponse<List<Socio>>> buscarTodosLosSocios() {
 		List<String> messages = new ArrayList<>();
 		messages.add("Socios registrados");
-		APIResponse<List<Socio>> response = new APIResponse<List<Socio>>(200, messages, service.mostrarSocios());
+		APIResponse<List<Socio>> response = new APIResponse<List<Socio>>(200, messages, service.buscarTodos());
 		return ResponseEntity.status(HttpStatus.OK).body(response);	
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<APIResponse<Socio>> mostrarSocioPorId(@PathVariable("id") Integer id) {
-		if(service.exists(id)) {
-			Socio socio = service.buscarSocioById(id);
+	public ResponseEntity<APIResponse<Socio>> buscarSocioPorId(@PathVariable("id") Integer id) {
+		if(service.existe(id)) {
+			Socio socio = service.buscarPorId(id);
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), null, socio);
 			return ResponseEntity.status(HttpStatus.OK).body(response);	
 		}else {
@@ -54,14 +54,14 @@ public class SocioController {
 	
 	@PostMapping
 	public ResponseEntity<APIResponse<Socio>> crearSocio(@RequestBody Socio socio) {
-		if(service.exists(socio.getId())) {
+		if(service.existe(socio.getId())) {
 			List<String> messages = new ArrayList<>();
 			messages.add("Ya existe una categoria con el ID = " + socio.getId().toString());
 			messages.add("Para actualizar utilice el verbo PUT");
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.BAD_REQUEST.value(), messages, null);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}else {
-			service.guardarSocio(socio);
+			service.guardar(socio);
 			List<String> messages = new ArrayList<>();
 			messages.add("Socio registrado con exito");
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.CREATED.value(), messages, socio);
@@ -71,17 +71,17 @@ public class SocioController {
 	
 	
 	@PutMapping
-	public ResponseEntity<APIResponse<Socio>> editarSocio(@RequestBody Socio socio) {
-		if(service.exists(socio.getId())) {
-			service.guardarSocio(socio);
+	public ResponseEntity<APIResponse<Socio>> modificarSocio(@RequestBody Socio socio) {
+		if(service.existe(socio.getId())) {
+			service.guardar(socio);
 			List<String> messages = new ArrayList<>();
 			messages.add("Datos de Socio modificados con exito");
-			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), null, socio);
+			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), messages, socio);
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}else {
 			List<String> messages = new ArrayList<>();
-			messages.add("No existe una categoria con el ID especificado");
-			messages.add("Para crear una nueva utilice el verbo POST");
+			messages.add("No existe un socio con el ID especificado");
+			messages.add("Para crear uno nuevo utilice el verbo POST");
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.BAD_REQUEST.value(), messages, null);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
@@ -89,8 +89,8 @@ public class SocioController {
 	
 	@DeleteMapping("/{id}")	
 	public ResponseEntity<APIResponse<Socio>> eliminarSocio(@PathVariable("id") Integer id) {
-		if(service.exists(id)) {
-			service.eliminarSocio(id);
+		if(service.existe(id)) {
+			service.eliminar(id);
 			List<String> messages = new ArrayList<>();
 			messages.add("El Socio fue eliminado de la Base de Datos") ;			
 			APIResponse<Socio> response = new APIResponse<Socio>(HttpStatus.OK.value(), messages, null);
@@ -114,20 +114,5 @@ public class SocioController {
 		return ResponseEntity.badRequest().body(response);
 	}
 	
-	
-	/*//--------------Control de existencia de ID-----------------
-	private boolean existe(Integer id) {
-		if(id == null) {
-			return false;
-		}else{
-			Socio socio = service.buscarSocioById(id);
-			if(socio == null) {
-				return false;				
-			}else {
-				return true;
-			}
-		}
-	}
-	*/
 	
 }

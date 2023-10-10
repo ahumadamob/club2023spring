@@ -6,10 +6,10 @@ import imb.pr2.club.entity.Socio;
 
 public interface ISocioService {
 	
-	public List<Socio> mostrarSocios();
-	public Socio buscarSocioById(Integer id);
-	public void guardarSocio(Socio socio);
-	public void eliminarSocio(Integer id);
-	boolean exists(Integer id);
+	public List<Socio> buscarTodos();
+	public Socio buscarPorId(Integer id);
+	public void guardar(Socio socio);
+	public void eliminar(Integer id);
+	boolean existe(Integer id);
 	
 }
