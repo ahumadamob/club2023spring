@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import imb.pr2.club.entity.Disciplina;
 import imb.pr2.club.service.IDisciplinaService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @RestController
 @RequestMapping("/api/v1/disciplinas")
@@ -36,7 +38,7 @@ public class DisciplinaController {
 	@GetMapping ("/{id}")
 	public ResponseEntity<APIResponse<Disciplina>> listarDisciplinaPorId(@PathVariable Integer id){
 		
-		if(this.existe(id)) {
+		if(disciplinaService.exists(id)) {
 			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
 			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.OK.value(), null, disciplina);
 			return ResponseEntity.status(HttpStatus.OK).body(response);	
@@ -52,10 +54,11 @@ public class DisciplinaController {
 		}
 	}
 	
+	
 	@PostMapping
 	public ResponseEntity<APIResponse<Disciplina>> crearDisciplina(@RequestBody Disciplina disciplina){
 		
-		if(this.existe(disciplina.getId())) {
+		if(disciplinaService.exists(disciplina.getId())) {
 			List<String> messages = new ArrayList<>();
 			messages.add("Ya existe una discplina con el id = " + disciplina.getId().toString());
 			messages.add("Para modificar utilice verbo PUT");
@@ -76,7 +79,7 @@ public class DisciplinaController {
 	@PutMapping
 	public ResponseEntity<APIResponse<Disciplina>> modificarDisciplina(@RequestBody Disciplina disciplina){
 		
-		if(this.existe(disciplina.getId())) {
+		if(disciplinaService.exists(disciplina.getId())) {
 			disciplinaService.guardarDisciplina(disciplina);
 			List<String> messages = new ArrayList<>();
 			messages.add("Se modificó la Disciplina correctamente");
@@ -96,7 +99,7 @@ public class DisciplinaController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<APIResponse<Disciplina>> eliminarDisciplinaPorId(@PathVariable Integer id){
 		
-		if(this.existe(id)) {
+		if(disciplinaService.exists(id)) {
 			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
 			disciplinaService.eliminarDisciplina(id);
 			List<String> messages = new ArrayList<>();
@@ -117,18 +120,7 @@ public class DisciplinaController {
 	
 	
 	
-	private boolean existe(Integer id) {
-		if(id == null) {
-			return false;
-		}else{
-			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
-			if(disciplina == null) {
-				return false;				
-			}else {
-				return true;
-			}
-		}
-	}
+	
 
 @ExceptionHandler(ConstraintViolationException.class)
 public ResponseEntity<APIResponse<?>> handleConstraintViolationException(ConstraintViolationException ex){
