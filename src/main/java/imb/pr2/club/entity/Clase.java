@@ -32,8 +32,6 @@ public class Clase {
 	private Disciplina discId;
 	
 	@NotNull
-	@Max(value = 10, message = "El valor maximo del cupo es de 10")
-	@Min(value= 1, message = "El valor minimo del cupo es 1")
 	private Integer cupo;
 	
 	

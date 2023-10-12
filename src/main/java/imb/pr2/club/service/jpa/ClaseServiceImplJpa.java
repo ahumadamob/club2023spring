@@ -22,27 +22,23 @@ public class ClaseServiceImplJpa implements IClaseService{
 	
 	
 	@Override
-	public List<Clase> buscarClase() {
+	public List<Clase> buscarTodos() {
 		return repo.findAll();
 	}
 
 	@Override
-	public Clase buscarClasePorId(Integer id) {
+	public Clase buscarPorId(Integer id) {
 		
-      Optional<Clase> optional;
+      Optional<Clase> optional= repo.findById(id);
 		
-		optional = repo.findById(id);
+		 
 		
-		if(optional.isPresent()) {
-			return optional.get();
-		}else {
-			return null;
-		}
+		return optional.orElse(null);
 	}
 
 	@Override
-	public void guardarClase(Clase clase) {
-		repo.save(clase);
+	public Clase guardar(Clase clase) {
+		return repo.save(clase);
 		
 	}
 
@@ -51,5 +47,16 @@ public class ClaseServiceImplJpa implements IClaseService{
 		repo.deleteById(id);
 		
 	}
+
+	@Override
+	public boolean exists(Integer id) {
+		
+			return (id == null)? false:  repo.existsById(id);
+		};
+	
+	
+	
+	
+	
 
 }
