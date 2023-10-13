@@ -11,4 +11,6 @@ public interface IDisciplinaService {
 	public void guardarDisciplina(Disciplina disciplina);
 	public void eliminarDisciplina(Integer id);
 	
+	public boolean exists(Integer id);
+	
 }
