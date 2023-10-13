@@ -30,7 +30,7 @@ public class DisciplinaController {
 
 	@GetMapping
 	public ResponseEntity<APIResponse<List<Disciplina>>> listarDisciplinas(){
-		APIResponse<List<Disciplina>> response = new APIResponse<List<Disciplina>>(200, null, disciplinaService.buscarDisciplinas());
+		APIResponse<List<Disciplina>> response = new APIResponse<List<Disciplina>>(200, null, disciplinaService.buscarTodos());
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
@@ -39,7 +39,7 @@ public class DisciplinaController {
 	public ResponseEntity<APIResponse<Disciplina>> listarDisciplinaPorId(@PathVariable Integer id){
 		
 		if(this.existe(id)) {
-			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
+			Disciplina disciplina = disciplinaService.buscarPorId(id);
 			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.OK.value(), null, disciplina);
 			return ResponseEntity.status(HttpStatus.OK).body(response);	
 	
@@ -65,7 +65,7 @@ public class DisciplinaController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 			
 		}else {
-			disciplinaService.guardarDisciplina(disciplina);
+			disciplinaService.guardar(disciplina);
 			List<String> messages = new ArrayList<>();
 			messages.add("Se creó la siguiente Disciplina:");
 			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.CREATED.value(), messages, disciplina);
@@ -79,7 +79,7 @@ public class DisciplinaController {
 	public ResponseEntity<APIResponse<Disciplina>> modificarDisciplina(@RequestBody Disciplina disciplina){
 		
 		if(this.existe(disciplina.getId())) {
-			disciplinaService.guardarDisciplina(disciplina);
+			disciplinaService.guardar(disciplina);
 			List<String> messages = new ArrayList<>();
 			messages.add("Se modificó la Disciplina correctamente");
 			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.OK.value(), messages, disciplina);
@@ -99,8 +99,8 @@ public class DisciplinaController {
 	public ResponseEntity<APIResponse<Disciplina>> eliminarDisciplinaPorId(@PathVariable Integer id){
 		
 		if(this.existe(id)) {
-			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
-			disciplinaService.eliminarDisciplina(id);
+			Disciplina disciplina = disciplinaService.buscarPorId(id);
+			disciplinaService.eliminar(id);
 			List<String> messages = new ArrayList<>();
 			messages.add("La Disciplina que figura en el cuerpo ha sido eliminada") ;			
 			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.OK.value(), messages, disciplina);
@@ -123,7 +123,7 @@ public class DisciplinaController {
 		if(id == null) {
 			return false;
 		}else{
-			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
+			Disciplina disciplina = disciplinaService.buscarPorId(id);
 			if(disciplina == null) {
 				return false;				
 			}else {
