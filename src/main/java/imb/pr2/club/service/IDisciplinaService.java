@@ -12,4 +12,6 @@ public interface IDisciplinaService {
 	public void eliminar(Integer id);
 	public boolean exists (Integer id);
 	
+	public boolean exists(Integer id);
+	
 }

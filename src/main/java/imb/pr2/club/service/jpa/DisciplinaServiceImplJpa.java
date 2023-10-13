@@ -50,10 +50,9 @@ public class DisciplinaServiceImplJpa implements IDisciplinaService{
 
 	@Override
 	public boolean exists(Integer id) {
-		if(id == null) {
-			return false;
-		}else {
 		return repo.existsById(id);
+		
 	}
-	}
+
+
 }
