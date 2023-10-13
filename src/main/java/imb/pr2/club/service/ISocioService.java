@@ -8,8 +8,8 @@ public interface ISocioService {
 	
 	public List<Socio> buscarTodos();
 	public Socio buscarPorId(Integer id);
-	public void guardar(Socio socio);
+	public Socio guardar(Socio socio);
 	public void eliminar(Integer id);
-	boolean existe(Integer id);
+	public boolean existe(Integer id);
 	
 }

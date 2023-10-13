@@ -24,16 +24,13 @@ public class SocioServiceImplJpa implements ISocioService {
 	@Override
 	public Socio buscarPorId(Integer id) {
 		Optional<Socio> optional = repo.findById(id);
-		if(optional.isPresent()) {
-			return optional.get();
-		}else {
-			return null;
-		}		
+		return optional.orElse(null);		
 	}
 
 	@Override
-	public void guardar(Socio socio) {
-		repo.save(socio);
+	public Socio guardar(Socio socio) {
+		return repo.save(socio);
+		
 	}
 
 	@Override
@@ -43,7 +40,7 @@ public class SocioServiceImplJpa implements ISocioService {
 	
 	@Override
 	public boolean existe(Integer id) {
-		return repo.existsById(id);
+		 return (id == null)? false: repo.existsById(id);
 	}
 	
 
