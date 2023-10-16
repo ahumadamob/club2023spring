@@ -36,23 +36,24 @@ public class DisciplinaServiceImplJpa implements IDisciplinaService{
 	
 	@Override
 	public Disciplina guardar(Disciplina disciplina) {
-		
 		return repo.save(disciplina);
 		
 	}
 
 	@Override
 	public void eliminar(Integer id) {
-		
 		repo.deleteById(id);
 		
 	}
 
 	@Override
 	public boolean exists(Integer id) {
-		return repo.existsById(id);
-		
+		return (id == null)? false: repo.existsById(id);
 	}
+		
+}	
+		
+	
 
 
-}
+

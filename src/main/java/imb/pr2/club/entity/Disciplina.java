@@ -24,12 +24,38 @@ public class Disciplina {
 	@Size(max = 20, message = "El nombre no puede superar los 20 caracteres")
 	String nombre;
 	
+	/*Entidad -------   Verificar que en tu entidad asignada tenga las relaciones @ManyToOne correspondientes*/
+	
 	@ManyToOne
-	@JoinColumn(name="disciplinaId")
-	private Disciplina disciplina;
+	@JoinColumn(name="profesorId")
+	private Profesor profesorId;
 	
+	@ManyToOne
+	@JoinColumn(name="claseId")
+	private Clase claseId;
 	
+	@ManyToOne
+	@JoinColumn(name="socioId")
+	private Socio socioId;
 	
+	public Profesor getProfesorId() {
+		return profesorId;
+	}
+	public void setProfesorId(Profesor profesorId) {
+		this.profesorId = profesorId;
+	}
+	public Clase getClaseId() {
+		return claseId;
+	}
+	public void setClaseId(Clase claseId) {
+		this.claseId = claseId;
+	}
+	public Socio getSocioId() {
+		return socioId;
+	}
+	public void setSocioId(Socio socioId) {
+		this.socioId = socioId;
+	}
 	public Integer getId() {
 		return id;
 	}
