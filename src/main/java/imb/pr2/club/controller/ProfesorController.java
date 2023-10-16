@@ -31,74 +31,79 @@ public class ProfesorController {
 	IProfesorService profesorService;
 	
 	@GetMapping
-	public ResponseEntity<APIResponse<List<Profesor>>> mostrarTodos() {		
-		APIResponse<List<Profesor>> response = new APIResponse<List<Profesor>>(201, null, profesorService.buscarProfesor());
-		return ResponseEntity.status(HttpStatus.OK).body(response);	
+	public ResponseEntity<APIResponse<List<Profesor>>> mostrarTodosLosProfesores() {	
+		
+		List<Profesor> profesores = profesorService.buscarTodos();
+		if(profesores.isEmpty()) {
+			return ResponseUtil.notFound("No se encontraron Profesores");
+		}else {
+			return ResponseUtil.success(profesores);
+		}
 	}
+	/*
+	 
+	 El codigo escrito para el Metodo GetMapping consiste en:
+	 - GetMapping: 
+	 				Es una anotacion que podemos utilizar gracias al Framework SpringBoot que nos permite
+	 				mapear una solicitud http GET. Por lo tanto, cuando un usuario realiza dicha peticion
+	 				con la URL correspondiente("http://localhost:8080/api/v1/profesor") se ejecuta el Metodo GET.
+	 
+	 - public ResponseEntity<APIResponse<List<Profesor>>> mostrarTodosLosProfesores(): 
+	 				En esta linea de codigo
+	 				estamos hablando de un metodo publico(se puede acceder a el fuera de la clase) que utiliza o 
+	 				devuelve un objeto ResponseEntity(perteneciente a SpringBoot) para controlar la respuesta que
+	 				obtiene el usuario o cliente al ejecutar un metodo.
+	 				Luego el objeto ResponseEntity devuelve un objeto del tipo APIResponse que contiene una lista
+	 				con objetos del tipo Profesor.
+	 				
+	 - List<Profesor> profesores = profesorService.buscarTodos():
+	 				En esta linea de codigo llamamos a un servicio que
+	 				busca a los obetos profesores con el metodo 'buscarTodos' y nos devuelve una lista llamada 'profesores'
+	 				compuesta por objetos de tipo Profesor.
+	 
+	 - if(profesores.isEmpty()) { return ResponseUtil.notFound("No se encontraron Profesores":
+	 				Cuando el objeto 'profesores' se encuentra vacio(lista vacia) se utiliza la clase y metodo
+	 				'ResponseUtil.notFound' para indicar en nuestra respuesta HTTP para contruir una respuesta clara
+	 				e indicar que no se encontraron 'profesores'.
+	 				
+	 - else { return ResponseUtil.success(profesores)}:
+	 				Si lla lista 'profesores' no esta vacia, por el contrario, contiene objetos del tipo 'Profesor', 
+	 				ResponseUtil es utilizado para crear una respuesta HTTP con un codigo 200(OK) y devolver la lista
+	 				de 'profesores.'
+
+	 
+	 */
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse<Profesor>> mostrarProfesorPorId(@PathVariable("id") Integer id) {
 		
-		if(profesorService.exists(id)) {
-			Profesor profesor = profesorService.buscarProfesorPorId(id);
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.OK.value(), null, profesor);
-			return ResponseEntity.status(HttpStatus.OK).body(response);	
-		}else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No se encontró el profesor con id = " + id.toString());
-			messages.add("Revise nuevamente el dato");
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);			
-		}
+		return (profesorService.exists(id)) ? ResponseUtil.success(profesorService.buscarPorId(id)) 
+				: ResponseUtil.notFound("No se encuentra Profesor indicado por Id para mostrar");
 	}
 	
-	@PostMapping("/postProfe")
+	@PostMapping
 	public ResponseEntity<APIResponse<Profesor>> crearProfesor(@RequestBody Profesor profesor) {
-				
-		if(profesorService.exists(profesor.getId())) {
-			List<String> messages = new ArrayList<>();
-			messages.add("Ya existe un profesor con el ID = " + profesor.getId().toString());
-			messages.add("Para actualizar se debe utilizar el verbo PUT");
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-		}else {
-			profesorService.guardarProfesor(profesor);
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.CREATED.value(), null, profesor);
-			return ResponseEntity.status(HttpStatus.CREATED).body(response);			
-		}			
-	}
+		
+			return (profesorService.exists(profesor.getId() ))? ResponseUtil.badRequest("Ya existe un Profesor")
+					: ResponseUtil.created(profesorService.guardar(profesor));
+			
+		}
 	
 	@PutMapping
-	public ResponseEntity<APIResponse<Profesor>> modificarProfesor(@RequestBody Profesor profesor) {
-				
-		if(profesorService.exists(profesor.getId())) {
-			profesorService.guardarProfesor(profesor);
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.OK.value(), null, profesor);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-		}else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No existe un profesor con ese ID ");
-			messages.add("Para crear un nuevo profesor debe utilizar el verbo POST");
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-		}
-
+	public ResponseEntity<APIResponse<Profesor>> modificarProfesor(@RequestBody Profesor profesor) {				
+		return (profesorService.exists(profesor.getId())) ? ResponseUtil.success(profesorService.guardar(profesor))
+				: ResponseUtil.notFound("No se encuentra un Profesor con el Id especificado para modificar");
 	}
 	
-	@DeleteMapping("/deleteProf/{id}")	
+	@DeleteMapping("/{id}")	
 	public ResponseEntity<APIResponse<Profesor>> eliminarProfesor(@PathVariable("id") Integer id) {
 		
 		if(profesorService.exists(id)) {
-			profesorService.eliminarProfesor(id);
-			List<String> messages = new ArrayList<>();
-			messages.add("El profesor que figura en el body ha sido eliminado correctamente") ;			
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.OK.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.OK).body(response);	
+			profesorService.eliminar(id);
+			return ResponseUtil.success(null);
 		}else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No existe un profesor con el ID = " + id.toString());
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);			
+			return ResponseUtil.notFound("No se encuentra un Profesor con el Id especificado para eliminar");
 		}
 		
 	}
@@ -121,13 +126,8 @@ public class ProfesorController {
 	
 	//manejador de excepciones
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<APIResponse<?>> handleConstraintViolationExeption(ConstraintViolationException ex){
-		List<String> errors= new ArrayList<>();
-		for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-				errors.add(violation.getMessage());
-			}
-			APIResponse<Profesor> response = new APIResponse<Profesor>(HttpStatus.BAD_REQUEST.value(),errors, null);
-			return ResponseEntity.badRequest().body(response);
+	public ResponseEntity<APIResponse<Object>> handleConstraintViolationExeption(ConstraintViolationException ex){
+		return ResponseUtil.handleConstraintException(ex);
 		}
 		
 	
