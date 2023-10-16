@@ -40,58 +40,56 @@ public class ClaseController {
 
 	/**
 	 * Este método es un controlador que responde a solicitudes GET para obtener información
-	 * sobre una "Clase" específica a través de su identificador (ID). El método busca la Clase
-	 * utilizando el servicio claseService y el ID proporcionado como parámetro.
+	 * sobre una "Clase" específica a través de su identificador (ID). 
+	 * 
+	 * Este método es de visibilidad pública, se llama mostrarClasePorId y retorna
+	 * un objeto del tipo ResposeEntity(clase propia de Spring para controlar y personalizar la respuesta HTTP)
+	 * que envuelve un objeto APIResponse que contendrá una instancia de la clase Clase. 
 	 *
-	 * Si la Clase existe en el sistema (verificado mediante claseService.exists), se crea una respuesta
-	 * exitosa utilizando ResponseUtil.success. Esta respuesta incluye un código de estado HTTP 200 (OK) y
-	 * la Clase recuperada como datos.
+	 *La funcionalidad de la línea: Clase clase = claseService.buscarPorId(id), es buscar una clase utilizando el servicio 
+	 *claseService filtrando por un Id específico pasado por parámetro y luego asigna ese objeto encontrado a la 
+	 *variable clase.
+	 *
+	 * Si la Clase existe en el sistema (verificado mediante claseService.exists, el cual
+	 * devuelve un booleano(false o true) para indicar si se encuentra la clase), se crea una respuesta
+	 * exitosa utilizando ResponseUtil.success.(claseService.buscarPorId(id)) Esta respuesta incluye 
+	 * un código de estado HTTP 200 (OK) y la Clase recuperada como datos.
 	 *
 	 * Si la Clase no se encuentra, se genera una respuesta de error utilizando ResponseUtil.badRequest.
-	 * Esta respuesta tiene un código de estado HTTP 400 (Bad Request) y un mensaje que indica que no se
-	 * encontró la Clase.
+	 * ("No se encuentró una clase con el Id proporcionado") Esta respuesta tiene un código de estado 
+	 * HTTP 400 (Bad Request) y un mensaje que indica que no se encontró la Clase.
 	 *
 	 * @param id El identificador de la Clase que se desea recuperar.
-	 * @return Una respuesta exitosa con los datos de la Clase si se encuentra.
-	 * @return Una respuesta de error con un mensaje si la Clase no se encuentra.
+	 * @return ResponseUtil.success.(claseService.buscarPorId(id)) Esta respuesta incluye 
+	 * un código de estado HTTP 200 (OK) y la Clase recuperada como datos.
+	 * @return ResponseUtil.badRequest.("No se encuentró una clase con el Id proporcionado") 
+	 * Esta respuesta tiene un código de estado HTTP 400 (Bad Request) y un mensaje que indica que no se encontró la Clase.
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse<Clase>> mostrarClasePorId(@PathVariable("id") Integer id) {
 		Clase clase = claseService.buscarPorId(id);
 
-		if (claseService.exists(id)) {
-
-			ResponseUtil.badRequest("Ya existe una clase");return ResponseUtil.success(clase);
-		} else {
-
-			return ResponseUtil.badRequest("No se encontró la clase");
-		}
+		return (claseService.exists(id)) ? ResponseUtil.success(claseService.buscarPorId(id)) 
+				: ResponseUtil.badRequest("No se encuentró una clase con el Id proporcionado");
 
 	}
 
 	@PostMapping
 	public ResponseEntity<APIResponse<Clase>> crearClase(@RequestBody Clase clase) {
 
-		if (claseService.exists(clase.getId())) {
+			return (claseService.exists(clase.getId() ))? ResponseUtil.badRequest("Ya existe una Clase")
+					: ResponseUtil.created(claseService.guardar(clase));
+		} 
 
-			return 
-		} else {
-
-			return ResponseUtil.created(claseService.guardar(clase));
-		}
-
-	}
+	
 
 	@PutMapping
 	public ResponseEntity<APIResponse<Clase>> modificarClase(@RequestBody Clase clase) {
+		
+		return (claseService.exists(clase.getId())) ? ResponseUtil.success(claseService.guardar(clase)) 
+				: ResponseUtil.badRequest("No existe la clase");
 
-		if (claseService.exists(clase.getId())) {
-
-			return ResponseUtil.success(claseService.guardar(clase));
-		} else {
-
-			return ResponseUtil.badRequest("No existe la clase");
-		}
+		
 
 	}
 
