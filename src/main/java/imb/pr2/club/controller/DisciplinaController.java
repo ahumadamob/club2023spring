@@ -42,15 +42,16 @@ public class DisciplinaController {
 	}
 	
 	
-	@GetMapping ("/{id}")
-	public ResponseEntity<APIResponse<Disciplina>> mostrarDisciplinaPorId(@PathVariable ("id") Integer id){
-		Disciplina disciplina = disciplinaService.buscarPorId(id);
-		if (disciplinaService.exists(id)) {
-			ResponseUtil.badRequest("Ya existe una disciplina"); return ResponseUtil.success(disciplina);
-		}else {
-			return ResponseUtil.badRequest("No se encontro la disciplina");
-		}
+	@GetMapping("/{id}")
+	public ResponseEntity<APIResponse<Disciplina>> mostrarDisciplinaPorId(@PathVariable("id") Integer id) {
+	    Disciplina disciplina = disciplinaService.buscarPorId(id);
+	    if (disciplinaService.exists(id)) {
+	        return ResponseUtil.success(disciplina); // Pasamos el resultado de buscarPorId directamente
+	    } else {
+	        return ResponseUtil.notFound("No se encontró la disciplina");
+	    }
 	}
+
 	
 	
 	@PostMapping

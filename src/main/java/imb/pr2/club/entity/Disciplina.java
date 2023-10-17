@@ -25,37 +25,7 @@ public class Disciplina {
 	String nombre;
 	
 	/*Entidad -------   Verificar que en tu entidad asignada tenga las relaciones @ManyToOne correspondientes*/
-	
-	@ManyToOne
-	@JoinColumn(name="profesorId")
-	private Profesor profesorId;
-	
-	@ManyToOne
-	@JoinColumn(name="claseId")
-	private Clase claseId;
-	
-	@ManyToOne
-	@JoinColumn(name="socioId")
-	private Socio socioId;
-	
-	public Profesor getProfesorId() {
-		return profesorId;
-	}
-	public void setProfesorId(Profesor profesorId) {
-		this.profesorId = profesorId;
-	}
-	public Clase getClaseId() {
-		return claseId;
-	}
-	public void setClaseId(Clase claseId) {
-		this.claseId = claseId;
-	}
-	public Socio getSocioId() {
-		return socioId;
-	}
-	public void setSocioId(Socio socioId) {
-		this.socioId = socioId;
-	}
+
 	public Integer getId() {
 		return id;
 	}
