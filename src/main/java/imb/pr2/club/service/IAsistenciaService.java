@@ -8,6 +8,6 @@ public interface IAsistenciaService {
 
 		public void guardar(Asistencia asistencia);
 		public void eliminar(Integer id);
-		public List<Asistencia> obtenerPorClase(Integer claseId);
-		public List<Asistencia> obtenerTodos();	
+		public List<Asistencia> buscarPorId(Integer claseId);
+		public List<Asistencia> buscarTodos();	
 }

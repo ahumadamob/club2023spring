@@ -28,32 +28,50 @@ public class AsistenciaController {
 	@Autowired
 	private IAsistenciaService asistenciaService;
 	
-	@GetMapping("/asistencia")
-	public List<Asistencia> obtenerTodasLasAsistencias(){
-		return asistenciaService.obtenerTodos();
-	}
-	
-	  // Agregar el método para eliminar una asistencia por ID
-    @DeleteMapping("/{id}")
-    public String eliminarAsistencia(@PathVariable Integer id) {
-        //Asistencia asistencia = asistenciaService.obtenerPorID(id);
+	//obtener todas las asistencias
+	 @GetMapping("/asistencia")
+	    public ResponseEntity<APIResponse<List<Asistencia>>> obtenerTodasLasAsistencias() {
+	        List<Asistencia> asistencias = asistenciaService.buscarTodos();
+	       //devolver respuestas usando ResponseUtil
+	        return ResponseUtil.success(asistencias);
+	    }
+	 
+        //obtener asistencia por id
+	    @GetMapping("/asistencia/{id}")
+	    public ResponseEntity<APIResponse<Asistencia>> obtenerAsistenciaPorId(@PathVariable Integer id) {
+	        Asistencia asistencia = (Asistencia) asistenciaService.buscarPorId(id);
+           
+	        //si no se encuentra la asistencia devuleve una respuesta 404 usando ResponseUtil
+	        if (asistencia == null) {
+	            return ResponseUtil.notFound("Asistencia no encontrada.");
+	        }
+            //respuesta exitosa utilizando ResponseUtil
+	        return ResponseUtil.success(asistencia);
+	    }
+	    
+	    // Método para actualizar una asistencia por su ID
+	@PutMapping("/asistencia/{id}")
+	    public ResponseEntity<APIResponse<String>> actualizarAsistencia1(@PathVariable Integer id, @RequestBody Asistencia asistenciaActualizada) {
+	        Asistencia asistenciaExistente = (Asistencia) asistenciaService.buscarPorId(id);
 
-        if (this.existeId(id) == null) {
-            return "Asistencia no encontrada.";
-        }
+	        if (asistenciaExistente == null) {
+	            return ResponseUtil.notFound("Asistencia no encontrada.");
+	        } else {
+	            // Actualizar los datos de la asistencia existente con los datos de la asistencia actualizada
+	            // ...
 
-        asistenciaService.eliminar(id);
-        return "Asistencia eliminada correctamente.";
-    }
-
+	            asistenciaService.guardar(asistenciaExistente);
+	            return ResponseUtil.success("Asistencia actualizada correctamente.");
+	        }
+	    }
+	 
     
-
-    // Agregar el método para actualizar una asistencia
     @PutMapping("/{id}")
     public ResponseEntity<String> actualizarAsistencia(@PathVariable Integer id, @RequestBody Asistencia asistenciaActualizada) {
         //Asistencia asistenciaExistente = asistenciaService.obtenerPorID(id);
 
         if (this.existeId(id) == null) {
+        	// Si la asistencia no existe, devolver una respuesta de error 404
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Asistencia no encontrada.");
         } else {
             // Actualizar los datos de la asistencia existente con los datos de la asistencia actualizada
@@ -71,68 +89,52 @@ public class AsistenciaController {
         // Retorna la asistencia si existe, de lo contrario, retorna null
     	return null;
 	    }
-
+    //Método para inscribir a una asistencia en una clase
 	@PostMapping
 	public Asistencia pruebaDesdeElBody(@RequestBody Asistencia asistenciaDesdeElBody) {
 		return asistenciaDesdeElBody;
 	}
 	
 	@PostMapping("/inscribir")
-	public String inscribir(@RequestBody Asistencia asistenciaDesdeElBody){
-		//inscribir (POST) antes de habilitar la inscripción, debe recuperar todos los inscriptos 
-		//actuales a la clase id y contarlos. En caso que esta cantidad sea menor al cupo, 
-		//hacer la inserción, de lo contrario, devolver el mensaje correspondiente a que se excede la cantidad en el cupo.
-	
-		  Integer cupos = asistenciaDesdeElBody.getClase().getCupo();
-	      Clase clase = claseService.buscarClasePorId(asistenciaDesdeElBody.getClase().getId());
+	public ResponseEntity<APIResponse<String>> inscribir(@RequestBody Asistencia asistenciaDesdeElBody) {
+	    Integer cupos = asistenciaDesdeElBody.getClase().getCupo();
+	    Clase clase = claseService.buscarClasePorId(asistenciaDesdeElBody.getClase().getId());
 
-	        if (clase == null) {
-	            return "Clase no encontrada.";
-	        }
-
-	        // Obtener la cantidad actual de inscritos por clase
-	        List<Asistencia> asistencias = asistenciaService.obtenerPorClase(asistenciaDesdeElBody.getClase().getId());
-	        Integer cantidad = asistencias.size();
-
-	        if (cantidad < cupos) {
-	            // Si hay espacio disponible, realizar la inserción en asistencia
-	            asistenciaService.guardar(asistenciaDesdeElBody);
-	            return "Inscripto correctamente.";
-	        } else {
-	            // Si se supera el cupo máximo, devolver un mensaje de error
-	            return "No se puede inscribir porque supera el cupo.";
-	        }
+	    if (clase == null) {
+	        return ResponseUtil.notFound("Clase no encontrada.");
 	    }
-		
-		
-		
-	/*Integer cupos;
-	Clase clase;
-	Integer cantidad = 0;
-	List<Asistencia> asistencias;
 
-	
-	clase = claseService.buscarClasePorId(asistenciaDesdeElBody.getClase().getId());
-	cupos = clase.getCupo();
-	
-	asistencias = asistenciaService.obtenerPorClase(asistenciaDesdeElBody.getClase().getId());
-	
-	//return asistencias;
-	cantidad = asistencias.size();
-	//clase = claseService.buscarClasePorId(4);
-	
-	if(cantidad < cupos) {
-		//Si voy a hacer la insercion en asistencia
-		asistenciaService.guardar(asistenciaDesdeElBody);
-		return "Inscripto correctamente.";
-	}else {
-		return "No se puede inscribir porque supera el cupo.";
+	    List<Asistencia> asistencias = asistenciaService.buscarPorId(asistenciaDesdeElBody.getClase().getId());
+	    Integer cantidad = asistencias.size();
+
+	    if (cantidad < cupos) {
+	    	// Si hay espacio disponible, realizar la inscripción y devolver una respuesta exitosa
+	        asistenciaService.guardar(asistenciaDesdeElBody);
+	        return ResponseUtil.success("Inscripto correctamente.");
+	    } else {
+	    	// Si se supera el cupo máximo, devolver un mensaje de error
+	        return ResponseUtil.badRequest("No se puede inscribir porque supera el cupo.");
+	    }
 	}
-	/*
-	for (Asistencia elemento : asistencias){
-		cantidad++;
-	}
-	*/
+	
+	 
+
+	  //método para eliminar una asistencia por ID
+	 @DeleteMapping("/asistencia/{id}")
+	 public ResponseEntity<APIResponse<String>> eliminarAsistencia(@PathVariable Integer id) {
+		 // Buscar la asistencia por su ID en el servicio
+		 List<Asistencia> asistencia = asistenciaService.buscarPorId(id);
+
+		 // Si no se encuentra la asistencia, devolver una respuesta de error 404 utilizando ResponseUtil
+	     if (asistencia == null) {
+	         return ResponseUtil.notFound("Asistencia no encontrada.");
+	     }
+
+	  // Si se encuentra la asistencia, eliminarla y devolver una respuesta exitosa utilizando ResponseUtil
+	     asistenciaService.eliminar(id);
+	     return ResponseUtil.success("Asistencia eliminada correctamente.");
+	 }
+
 	
 }
 	

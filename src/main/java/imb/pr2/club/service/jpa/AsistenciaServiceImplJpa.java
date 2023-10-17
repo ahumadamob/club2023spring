@@ -26,13 +26,13 @@ public class AsistenciaServiceImplJpa implements IAsistenciaService {
 	}
 
 	@Override
-	public List<Asistencia> obtenerPorClase(Integer claseId) {		
+	public List<Asistencia> buscarPorId(Integer claseId) {		
 		return repo.findByClaseId(claseId);
 
 	}
 
 	@Override
-	public List<Asistencia> obtenerTodos() {
+	public List<Asistencia> buscarTodos() {
 		return repo.findAll();
 	}
 
