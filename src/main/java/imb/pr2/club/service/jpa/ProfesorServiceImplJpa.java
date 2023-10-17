@@ -19,35 +19,32 @@ public class ProfesorServiceImplJpa  implements IProfesorService{
 	ProfesorRepository repo;
 
 	@Override
-	public List<Profesor> buscarProfesor() {		
+	public List<Profesor> buscarTodos() {		
 		return repo.findAll();
 
 	}
 
 	@Override
-	public void guardarProfesor(Profesor profesor) {
-		repo.save(profesor);
+	public Profesor guardar(Profesor profesor) {
+		return repo.save(profesor);
 		
 	} 
 
 	@Override
-	public void eliminarProfesor(Integer id) {
+	public void eliminar(Integer id) {
 		repo.deleteById(id);		
 	}
 
 	@Override
-	public Profesor buscarProfesorPorId(Integer id) {
+	public Profesor buscarPorId(Integer id) {
 		Optional<Profesor> optional = repo.findById(id);
-		if(optional.isPresent()) {
-			return optional.get();
-		}else {
-			return null;
-		}		
+		return optional.orElse(null);
 	}
 	
 	@Override
 	public boolean exists(Integer id) {
-		return repo.existsById(id);
+		return (id == null)? false: repo.existsById(id);  
+		
 	};
 	
 }
