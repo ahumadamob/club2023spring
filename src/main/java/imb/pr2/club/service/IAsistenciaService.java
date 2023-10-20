@@ -10,4 +10,6 @@ public interface IAsistenciaService {
 		public void eliminar(Integer id);
 		public List<Asistencia> buscarPorId(Integer claseId);
 		public List<Asistencia> buscarTodos();	
+		
+		public boolean exists(Integer id);
 }

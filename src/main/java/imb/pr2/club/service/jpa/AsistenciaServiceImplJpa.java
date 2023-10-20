@@ -36,4 +36,10 @@ public class AsistenciaServiceImplJpa implements IAsistenciaService {
 		return repo.findAll();
 	}
 
+	@Override
+	public boolean exists(Integer id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
