@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import imb.pr2.club.entity.Asistencia;
-import imb.pr2.club.entity.Clase;
 import imb.pr2.club.service.IAsistenciaService;
 import imb.pr2.club.service.IClaseService;
 
@@ -42,66 +41,50 @@ public class AsistenciaController {
 	        //si no se encuentra la asistencia devuleve una respuesta 404 usando ResponseUtil
 	        if (!asistenciaService.exists(id)) {
 	            return ResponseUtil.notFound("Asistencia no encontrada.");
-	        }
+	        }else {
+	        	
 	        
-            Asistencia asistencia = (Asistencia) asistenciaService.buscarPorId(id);
+	        Asistencia asistencia = asistenciaService.buscarPorId(id);
+           
             //respuesta exitosa utilizando ResponseUtil
 	        return ResponseUtil.success(asistencia);
+	        }
 	    }
-	    
 	
     
-	  @PutMapping("/asistencia/{id}")
-	    public ResponseEntity<APIResponse<String>> actualizarAsistencia(@PathVariable Integer id, @RequestBody Asistencia asistenciaActualizada) {
-	        if (!asistenciaService.exists(id)) {
+	  @PutMapping("/asistencia")
+	    public ResponseEntity<APIResponse<Asistencia>> actualizarAsistencia( @RequestBody Asistencia asistencia) {
+	        if (!asistenciaService.exists(asistencia.getId())) {
 	            return ResponseUtil.notFound("Asistencia no encontrada.");
 	        } else {
-	            // Actualizar los datos de la asistencia existente con los datos de la asistencia actualizada
-	            // asistenciaService.guardar(asistenciaActualizada);
-	            // Actualiza otros campos si es necesario
+	       	        	
+	            return ResponseUtil.success(asistenciaService.guardar(asistencia));
+	        }
+	    }
 
-	            return ResponseUtil.success("Asistencia actualizada correctamente.");
+	  @PostMapping("/asistencia")
+	    public ResponseEntity<APIResponse<Asistencia>> crearAsistencia( @RequestBody Asistencia asistencia) {
+	        if (asistenciaService.exists(asistencia.getId())) {
+	            return ResponseUtil.badRequest("ya existe la asistencia");
+	        } else {
+	       	        	
+	            return ResponseUtil.created(asistenciaService.guardar(asistencia));
 	        }
 	    }
 
     
-	  @PostMapping("/inscribir")
-	  public ResponseEntity<APIResponse<String>> inscribir(@RequestBody Asistencia asistenciaDesdeElBody) {
-	      Integer cupos = asistenciaDesdeElBody.getClase().getCupo();
-	      Clase clase = claseService.buscarClasePorId(asistenciaDesdeElBody.getClase().getId());
-
-	      if (clase == null) {
-	          return ResponseUtil.notFound("Clase no encontrada.");
-	      }
-
-	      List<Asistencia> asistencias = asistenciaService.buscarPorId(asistenciaDesdeElBody.getClase().getId());
-	      Integer cantidad = asistencias.size();
-
-	      if (cantidad < cupos) {
-	          // Establecer la clase a la que está asociada la asistencia
-	          asistenciaDesdeElBody.setClase(clase);
-	          
-	          // Si hay espacio disponible, realizar la inscripción y devolver una respuesta exitosa
-	          asistenciaService.guardar(asistenciaDesdeElBody);
-	          return ResponseUtil.success("Inscripto correctamente.");
-	      } else {
-	          // Si se supera el cupo máximo, devolver un mensaje de error
-	          return ResponseUtil.badRequest("No se puede inscribir porque supera el cupo.");
-	      }
-	  }
-
-	 
+	
 
 	  // Método para eliminar una asistencia por ID
 	    @DeleteMapping("/asistencia/{id}")
-	    public ResponseEntity<APIResponse<String>> eliminarAsistencia(@PathVariable Integer id) {
+	    public ResponseEntity<APIResponse<Asistencia>> eliminarAsistencia(@PathVariable Integer id) {
 	        if (!asistenciaService.exists(id)) {
 	            return ResponseUtil.notFound("Asistencia no encontrada.");
 	        }
 
 	        // Si se encuentra la asistencia, eliminarla y devolver una respuesta exitosa utilizando ResponseUtil
-	        asistenciaService.eliminar(id);
-	        return ResponseUtil.success("Asistencia eliminada correctamente.");
+	       
+	        return ResponseUtil.success("SE HA ELIMINADO EL OBJETO"+ id);
 	    }
 
 	
