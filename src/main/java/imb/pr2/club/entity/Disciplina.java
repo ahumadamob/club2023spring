@@ -23,20 +23,20 @@ public class Disciplina {
 	@NotBlank(message="El nombre no puede quedar vacio")
 	@Size(max = 20, message = "El nombre no puede superar los 20 caracteres")
 	String nombre;
-	
-	/*Entidad -------   Verificar que en tu entidad asignada tenga las relaciones @ManyToOne correspondientes*/
-
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public String getNombre() {
 		return nombre;
 	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
+
 }

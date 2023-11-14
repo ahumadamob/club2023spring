@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -27,9 +29,11 @@ public class Profesor {
 	@Size(max = 10, message = "El DNI no puede superar los 10 caracteres") 
 	private String dni;
 	
-	@NotBlank(message = "La actividad no puede estar vacía")
-	@Size(max = 50, message = "La actividad no puede superar los 50 caracteres") 
-	private String actividad;
+	@ManyToOne
+	@JoinColumn(name="disciplinaId")
+	private Disciplina disciplina;
+	
+	
 	
 	public Integer getId() {
 		return id;
@@ -55,12 +59,15 @@ public class Profesor {
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-	public String getActividad() {
-		return actividad;
+	public Disciplina getDisciplina() {
+		return disciplina;
 	}
-	public void setActividad(String actividad) {
-		this.actividad = actividad;
+	public void setDisciplina(Disciplina disciplina) {
+		this.disciplina = disciplina;
 	}
+	
+	
+	
 }
 
 
