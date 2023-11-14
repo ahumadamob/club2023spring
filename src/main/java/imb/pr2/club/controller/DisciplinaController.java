@@ -19,122 +19,95 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import imb.pr2.club.entity.Disciplina;
 import imb.pr2.club.service.IDisciplinaService;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
+
 
 
 @RestController
 @RequestMapping("/api/v1/disciplinas")
+
 public class DisciplinaController {
 	
 	@Autowired
 	public IDisciplinaService disciplinaService;
 
 	@GetMapping
-	public ResponseEntity<APIResponse<List<Disciplina>>> listarDisciplinas(){
-		APIResponse<List<Disciplina>> response = new APIResponse<List<Disciplina>>(200, null, disciplinaService.buscarDisciplinas());
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
-	
-	
-	@GetMapping ("/{id}")
-	public ResponseEntity<APIResponse<Disciplina>> listarDisciplinaPorId(@PathVariable Integer id){
+	public ResponseEntity<APIResponse<List<Disciplina>>> mostrarTodasLasDisciplinas(){
 		
-		if(disciplinaService.exists(id)) {
-			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.OK.value(), null, disciplina);
-			return ResponseEntity.status(HttpStatus.OK).body(response);	
-	
-		} else {
-			
-			List<String> messages = new ArrayList<>();
-			messages.add("No se encontró la Disciplina con id = " + id.toString());
-			messages.add("Verifique el parámetro ingresado");
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-			
+		List<Disciplina> disciplina = disciplinaService.buscarTodos();
+		if(disciplina.isEmpty()) {
+			return ResponseUtil.notFound("No se encontraron disciplinas");
+		}else {
+			return ResponseUtil.success(disciplina);
 		}
 	}
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<APIResponse<Disciplina>> mostrarDisciplinaPorId(@PathVariable("id") Integer id) {
+	    Disciplina disciplina = disciplinaService.buscarPorId(id);
+	    if (disciplinaService.exists(id)) {
+	        return ResponseUtil.success(disciplina); // Pasamos el resultado de buscarPorId directamente
+	    } else {
+	        return ResponseUtil.notFound("No se encontró la disciplina");
+	    }
+	}
+
 	
 	
 	@PostMapping
 	public ResponseEntity<APIResponse<Disciplina>> crearDisciplina(@RequestBody Disciplina disciplina){
-		
-		if(disciplinaService.exists(disciplina.getId())) {
-			List<String> messages = new ArrayList<>();
-			messages.add("Ya existe una discplina con el id = " + disciplina.getId().toString());
-			messages.add("Para modificar utilice verbo PUT");
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-			
-		}else {
-			disciplinaService.guardarDisciplina(disciplina);
-			List<String> messages = new ArrayList<>();
-			messages.add("Se creó la siguiente Disciplina:");
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.CREATED.value(), messages, disciplina);
-			return ResponseEntity.status(HttpStatus.CREATED).body(response);
-			
-		}
+		return (disciplinaService.exists(disciplina.getId()))? ResponseUtil.badRequest("Ya existe una disciplina")
+				:ResponseUtil.created(disciplinaService.guardar(disciplina));
 	}
 	
 	
 	@PutMapping
 	public ResponseEntity<APIResponse<Disciplina>> modificarDisciplina(@RequestBody Disciplina disciplina){
-		
-		if(disciplinaService.exists(disciplina.getId())) {
-			disciplinaService.guardarDisciplina(disciplina);
-			List<String> messages = new ArrayList<>();
-			messages.add("Se modificó la Disciplina correctamente");
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.OK.value(), messages, disciplina);
-			return ResponseEntity.status(HttpStatus.CREATED).body(response);
-			
+		if (disciplinaService.exists(disciplina.getId())) {
+			return ResponseUtil.success(disciplinaService.guardar(disciplina));
 		}else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No existe una discplina con el id = " + disciplina.getId().toString());
-			messages.add("Verifique que el ID corresponda a una disciplina existente");
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-			
-		}	
-	}
+			return ResponseUtil.badRequest("No existe la disciplina");
+		}
+}
+	
+	/*En el controlador, documenta con comentarios el método DELETE para la eliminación de un elemento por su id*/
+	/*
+
+1. `@DeleteMapping("/{id}")`: Esta anotación de Spring Boot indica que este método manejará peticiones HTTP DELETE a una URL que tiene un parámetro de ruta llamado "id". Esto significa que el ID de la disciplina que se desea eliminar se proporciona en la URL, por ejemplo, `/disciplinas/123` donde 123 sería el ID de la disciplina.
+
+2. `public ResponseEntity<APIResponse<Disciplina>> eliminarDisciplinaPorId(@PathVariable("id") Integer id)`: Este es el método que maneja las peticiones DELETE. Toma un parámetro de ruta llamado "id", que se pasa como un parámetro en la función. La función devuelve un objeto `ResponseEntity` que contiene una respuesta HTTP y un tipo de contenido. En este caso, el tipo de contenido es `APIResponse` que parece ser un contenedor personalizado para enviar respuestas desde el servidor. El tipo de contenido de la respuesta es `Disciplina`, que parece ser la entidad que se está eliminando.
+
+3. `if (disciplinaService.exists(id)) {`: Aquí, el código verifica si existe una disciplina con el ID proporcionado. Esto se hace llamando a un método `exists` en el objeto `disciplinaService`. Si existe una disciplina con ese ID, se procede a eliminarla.
+
+4. `disciplinaService.eliminar(id);`: Si la disciplina existe, se llama al método `eliminar` en el objeto `disciplinaService` para eliminar la disciplina con el ID proporcionado.
+
+5. `return ResponseUtil.badRequest("La Disciplina ha sido eliminada");`: Si la eliminación es exitosa, se devuelve una respuesta HTTP con un estado "BadRequest" (aunque el mensaje sugiere que debería ser un estado "OK" o "NoContent" ya que la eliminación se realizó con éxito) junto con un mensaje que dice que la disciplina ha sido eliminada.
+
+6. `else {`: Si en el paso 3 se determina que la disciplina con el ID proporcionado no existe, se ejecutará el código en este bloque.
+
+7. `return ResponseUtil.badRequest("No existe la disciplina con el ID = " + id);`: En este caso, se devuelve una respuesta HTTP con estado "BadRequest" y un mensaje que indica que no existe ninguna disciplina con el ID proporcionado.
+
+En resumen, este código es un controlador que maneja solicitudes DELETE para eliminar una disciplina por su ID. Si la disciplina existe, se elimina y se devuelve un mensaje de éxito. Si la disciplina no existe, se devuelve un mensaje de error. Sin embargo, el uso del estado "BadRequest" en lugar de "OK" o "NoContent" puede no ser apropiado en el contexto de eliminar con éxito una entidad.*/
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<APIResponse<Disciplina>> eliminarDisciplinaPorId(@PathVariable Integer id){
-		
+	public ResponseEntity<APIResponse<Disciplina>> eliminarDisciplinaPorId(@PathVariable ("id") Integer id){
 		if(disciplinaService.exists(id)) {
-			Disciplina disciplina = disciplinaService.buscarDisciplinaPorId(id);
-			disciplinaService.eliminarDisciplina(id);
-			List<String> messages = new ArrayList<>();
-			messages.add("La Disciplina que figura en el cuerpo ha sido eliminada") ;			
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.OK.value(), messages, disciplina);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-			
+		disciplinaService.eliminar(id);
+			return ResponseUtil.badRequest("La Disciplina a sido eliminada");
 		}else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No existe una discplina con el id = " + id.toString());
-			messages.add("Verifique que ID correspona a una disciplina existente");
-			APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-			
-		}
-		
+			return ResponseUtil.badRequest("No existe la disciplina con el ID = " + id);
+		}		
 	}
 	
 	
-	
-	
-
 @ExceptionHandler(ConstraintViolationException.class)
-public ResponseEntity<APIResponse<?>> handleConstraintViolationException(ConstraintViolationException ex){
-	List<String> errors = new ArrayList<>();
-	for (ConstraintViolation<?> violation: ex.getConstraintViolations()) {
-		
-		errors.add(violation.getMessage());
-	}
-	APIResponse<Disciplina> response = new APIResponse<Disciplina>(HttpStatus.BAD_REQUEST.value(), errors, null);
-	return ResponseEntity.badRequest().body(response);
-	
-	
+	public ResponseEntity<APIResponse<Object>> handleConstrainViolationException(ConstraintViolationException ex){
+	return ResponseUtil.handleConstraintException(ex);
 }
 	
 }
+/*Además, se debe tener en cuenta lo siguiente:
+
+Convención de nombres: para los nombres de los métodos en el controlador, debes incluir la referencia a su entidad (a diferencia de lo que sucede en el servicio) por ejemplo: buscarPersonaPorId.
+Utilidades del response: utilizar el objeto ResponseEntity combinado con el objeto APIResponse. Utilizar la utilidad ResponseUtil.
+Manejo de excepciones: añadir el manejo de excepciones utilizando la utilidad del ResponseUtil*/
