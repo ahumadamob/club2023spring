@@ -28,105 +28,86 @@ public class ClaseController {
 	@Autowired
 	IClaseService claseService;
 
-	
 	@GetMapping
-	public ResponseEntity<APIResponse<List<Clase>>> buscarClase() {
+	public ResponseEntity<APIResponse<List<Clase>>> mostrarTodasLasClase() {
 
-		APIResponse<List<Clase>> response = new APIResponse<List<Clase>>(200, null, claseService.buscarClase());
-
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		List<Clase> clase = claseService.buscarTodos();
+		if (clase.isEmpty()) {
+			return ResponseUtil.notFound("No se encontraron clases");
+		}
+		return ResponseUtil.success(clase);
 	}
 
+	/**
+	 * Este método es un controlador que responde a solicitudes GET para obtener información
+	 * sobre una "Clase" específica a través de su identificador (ID). 
+	 * 
+	 * Este método es de visibilidad pública, se llama mostrarClasePorId y retorna
+	 * un objeto del tipo ResposeEntity(clase propia de Spring para controlar y personalizar la respuesta HTTP)
+	 * que envuelve un objeto APIResponse que contendrá una instancia de la clase Clase. 
+	 *
+	 *La funcionalidad de la línea: Clase clase = claseService.buscarPorId(id), es buscar una clase utilizando el servicio 
+	 *claseService filtrando por un Id específico pasado por parámetro y luego asigna ese objeto encontrado a la 
+	 *variable clase.
+	 *
+	 * Si la Clase existe en el sistema (verificado mediante claseService.exists, el cual
+	 * devuelve un booleano(false o true) para indicar si se encuentra la clase), se crea una respuesta
+	 * exitosa utilizando ResponseUtil.success.(claseService.buscarPorId(id)) Esta respuesta incluye 
+	 * un código de estado HTTP 200 (OK) y la Clase recuperada como datos.
+	 *
+	 * Si la Clase no se encuentra, se genera una respuesta de error utilizando ResponseUtil.badRequest.
+	 * ("No se encuentró una clase con el Id proporcionado") Esta respuesta tiene un código de estado 
+	 * HTTP 400 (Bad Request) y un mensaje que indica que no se encontró la Clase.
+	 *
+	 * @param id El identificador de la Clase que se desea recuperar.
+	 * @return ResponseUtil.success.(claseService.buscarPorId(id)) Esta respuesta incluye 
+	 * un código de estado HTTP 200 (OK) y la Clase recuperada como datos.
+	 * @return ResponseUtil.badRequest.("No se encuentró una clase con el Id proporcionado") 
+	 * Esta respuesta tiene un código de estado HTTP 400 (Bad Request) y un mensaje que indica que no se encontró la Clase.
+	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<APIResponse<Clase>> buscarClasePorId(@PathVariable("id") Integer id) {
+	public ResponseEntity<APIResponse<Clase>> mostrarClasePorId(@PathVariable("id") Integer id) {
+		Clase clase = claseService.buscarPorId(id);
 
-		if (this.existe(id)) {
-			Clase clase = claseService.buscarClasePorId(id);
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.OK.value(), null, clase);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-		} else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No se encontró la Clase con id = " + id.toString());
-			messages.add("Revise nuevamente el parámetro");
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-		}
+		return (claseService.exists(id)) ? ResponseUtil.success(claseService.buscarPorId(id)) 
+				: ResponseUtil.badRequest("No se encuentró una clase con el Id proporcionado");
 
 	}
 
 	@PostMapping
 	public ResponseEntity<APIResponse<Clase>> crearClase(@RequestBody Clase clase) {
 
-		if (this.existe(clase.getId())) {
-			List<String> messages = new ArrayList<>();
-			messages.add("Ya existe una clase con el ID = " + clase.getId().toString());
-			messages.add("Para actualizar utilice el verbo PUT");
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-		} else {
-			claseService.guardarClase(clase);
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.CREATED.value(), null, clase);
-			return ResponseEntity.status(HttpStatus.CREATED).body(response);
-		}
+			return (claseService.exists(clase.getId() ))? ResponseUtil.badRequest("Ya existe una Clase")
+					: ResponseUtil.created(claseService.guardar(clase));
+		} 
 
-	}
+	
 
 	@PutMapping
 	public ResponseEntity<APIResponse<Clase>> modificarClase(@RequestBody Clase clase) {
+		
+		return (claseService.exists(clase.getId())) ? ResponseUtil.success(claseService.guardar(clase)) 
+				: ResponseUtil.badRequest("No existe la clase");
 
-		if (this.existe(clase.getId())) {
-			claseService.guardarClase(clase);
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.OK.value(), null, clase);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-		} else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No existe una clase con el ID especificado");
-			messages.add("Para crear una nueva utilice el verbo POST");
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-		}
+		
 
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<APIResponse<Clase>> eliminarClase(@PathVariable("id") Integer id) {
+	public ResponseEntity<APIResponse<String>> eliminarClase(@PathVariable("id") Integer id) {
 
-		if (this.existe(id)) {
+		if (claseService.exists(id)) {
 			claseService.eliminarClase(id);
-			List<String> messages = new ArrayList<>();
-			messages.add("La Clase que figura en el cuerpo ha sido eliminada");
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.OK.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
+			return ResponseUtil.success("La Clase que figura en el cuerpo ha sido eliminada");
 		} else {
-			List<String> messages = new ArrayList<>();
-			messages.add("No existe una categoria con el ID = " + id.toString());
-			APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.BAD_REQUEST.value(), messages, null);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+			return ResponseUtil.badRequest("No existe la clase con el ID = " + id);
 		}
 
 	}
-	
+
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<APIResponse<?>> handleConstraintViolationException(ConstraintViolationException ex){
-		List<String> errors = new ArrayList<>();
-		for(ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-			errors.add(violation.getMessage());
-		}
-		APIResponse<Clase> response = new APIResponse<Clase>(HttpStatus.BAD_REQUEST.value(), errors, null);
-		return ResponseEntity.badRequest().body(response);
-	}
-
-	private boolean existe(Integer id) {
-		if (id == null) {
-			return false;
-		} else {
-			Clase clase = claseService.buscarClasePorId(id);
-			if (clase == null) {
-				return false;
-			} else {
-				return true;
-			}
-		}
+	public ResponseEntity<APIResponse<Object>> handleConstraintViolationException(ConstraintViolationException ex) {
+		return ResponseUtil.handleConstraintException(ex);
 	}
 
 }
