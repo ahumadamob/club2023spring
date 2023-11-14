@@ -19,14 +19,14 @@ public class DisciplinaServiceImplJpa implements IDisciplinaService{
 	DisciplinaRepository repo;
 
 	@Override
-	public List<Disciplina> buscarDisciplinas() {
+	public List<Disciplina> buscarTodos() {
 	
 		return repo.findAll();
 		
 	}
 
 	@Override
-	public Disciplina buscarDisciplinaPorId(Integer id){
+	public Disciplina buscarPorId(Integer id){
 		// Buscar una disciplina por su ID en la base de datos
 		 Optional<Disciplina> optionalDisciplina = repo.findById(id);
 		 // Utilizar orElse(null) para manejar el valor opcional de manera segura
@@ -35,17 +35,25 @@ public class DisciplinaServiceImplJpa implements IDisciplinaService{
 	}
 	
 	@Override
-	public void guardarDisciplina(Disciplina disciplina) {
-		
-		repo.save(disciplina);
+	public Disciplina guardar(Disciplina disciplina) {
+		return repo.save(disciplina);
 		
 	}
 
 	@Override
-	public void eliminarDisciplina(Integer id) {
-		
+	public void eliminar(Integer id) {
 		repo.deleteById(id);
 		
 	}
 
-}
+	@Override
+	public boolean exists(Integer id) {
+		return (id == null)? false: repo.existsById(id);
+	}
+		
+}	
+		
+	
+
+
+
