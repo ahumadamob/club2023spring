@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
-
 public class ResponseUtil {
 
     private ResponseUtil() {
@@ -21,6 +20,11 @@ public class ResponseUtil {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
+    public static <T> ResponseEntity<APIResponse<T>> success(String message) {
+        APIResponse<T> response = new APIResponse<>(HttpStatus.OK.value(), addSingleMessage(message), null);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }    
+
     public static <T> ResponseEntity<APIResponse<T>> created(T data) {
         APIResponse<T> response = new APIResponse<>(HttpStatus.CREATED.value(), null, data);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -29,7 +33,6 @@ public class ResponseUtil {
     public static <T> ResponseEntity<APIResponse<T>> error(HttpStatus status, String message) {
         APIResponse<T> response = new APIResponse<>(status.value(), addSingleMessage(message), null);
         return ResponseEntity.status(status).body(response);
-    }    
 
     public static <T> ResponseEntity<APIResponse<T>> notFound(String message) {
         APIResponse<T> response = new APIResponse<>(HttpStatus.NOT_FOUND.value(), addSingleMessage(message), null);
@@ -55,4 +58,6 @@ public class ResponseUtil {
         messages.add(message);
         return messages;
     }
+
 }
+

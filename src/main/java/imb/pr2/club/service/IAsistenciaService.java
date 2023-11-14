@@ -6,8 +6,10 @@ import imb.pr2.club.entity.Asistencia;
 
 public interface IAsistenciaService {
 
-		public void guardar(Asistencia asistencia);
+		public Asistencia guardar(Asistencia asistencia);
 		public void eliminar(Integer id);
-		public List<Asistencia> obtenerPorClase(Integer claseId);
-		public List<Asistencia> obtenerTodos();	
+		public Asistencia buscarPorId(Integer id);
+		public List<Asistencia> buscarTodos();	
+		
+		public boolean exists(Integer id);
 }
